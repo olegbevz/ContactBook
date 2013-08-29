@@ -1,0 +1,47 @@
+﻿@using UMSSoft.ContactList.Models
+@model IEnumerable<Contact>
+
+@{
+    ViewBag.Title = "Записная книжка для контактов";
+    Layout = "_Layout.cshtml";
+}
+
+<div>
+    <table class="table table-bordered">
+        <tr>
+            <th>Полное имя</th>
+            <th>Адрес</th>
+            <th>Телефон</th>
+            <th>Действия</th>
+        </tr>
+        <tbody>
+            @foreach (var contact in Model)
+            {
+                <tr>
+                    <td>@contact.Name</td>
+                    <td>@contact.Adress</td>
+                    <td>@contact.Phone</td>
+                    <td>
+                        <button class="btn btn-small" onclick="onEditContactButtonClick('@Url.Action("EditContact", new { contact.Id })')">
+                            <i class="icon-pencil" title="Редактировать"></i>
+                        </button>
+                        <button class="btn btn-small" onclick="onRemoveContactButtonClick('@Url.Action("RemoveContact", new { contact.Id })')">
+                            <i class="icon-trash" title="Удалить"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button class="btn btn-info" onclick="onCreateContactButtonClick('@Url.Action("CreateContact")')">
+        <i class="icon-white icon-plus"></i> Добавить контакт
+    </button>
+    
+    <div class="modal" id="ModalDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden="false">
+  
+</div>
+
+    <script type="text/javascript" src="../../Scripts/event-handlers.js">
+        
+    </script>
+</div>

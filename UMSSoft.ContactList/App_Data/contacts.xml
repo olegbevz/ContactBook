@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<ArrayOfContact xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Contact>
+    <Id>d062f021-e719-4bb6-8c23-1b2216cc2787</Id>
+    <Name>Мария Корчагина</Name>
+    <Adress>Партизанская</Adress>
+    <Phone>3543533222</Phone>
+  </Contact>
+  <Contact>
+    <Id>4d9f2571-2248-4a19-a231-7d419f6b35eb</Id>
+    <Name>Иванов Иван Иванович</Name>
+    <Adress>234</Adress>
+    <Phone>4534534</Phone>
+  </Contact>
+  <Contact>
+    <Id>f74c95ac-dde4-4bc0-9044-154a5ef33def</Id>
+    <Name>Бевз Олег Денисович</Name>
+    <Adress>Тверская</Adress>
+    <Phone>89234151708</Phone>
+  </Contact>
+  <Contact>
+    <Id>54fa4faf-5082-429a-8d70-7a314071a00a</Id>
+    <Name>Сидоров Сергей Петрович</Name>
+    <Adress>Комсомольский</Adress>
+    <Phone>89234151708</Phone>
+  </Contact>
+  <Contact>
+    <Id>c064df0c-f5a2-49de-a0ec-cb28ffdaba70</Id>
+    <Name>Августина Надежда Викторовна </Name>
+    <Adress>2324</Adress>
+    <Phone>34234</Phone>
+  </Contact>
+  <Contact>
+    <Id>dd1baeaa-ae3b-4969-abcf-d4521bdb727b</Id>
+    <Name>Товкач Сергей Евгеньевич</Name>
+    <Adress>345345</Adress>
+    <Phone>53453453434</Phone>
+  </Contact>
+  <Contact>
+    <Id>7abc021c-9b8c-49c6-927a-fd9e97d491b9</Id>
+    <Name>ertert4</Name>
+    <Adress>rterter4</Adress>
+    <Phone>rter4</Phone>
+  </Contact>
+  <Contact>
+    <Id>c51508e2-1bec-4c6e-9bdb-fed289ebd306</Id>
+    <Name>1232</Name>
+    <Adress>323423</Adress>
+    <Phone>3212312</Phone>
+  </Contact>
+  <Contact>
+    <Id>5632e000-f6c7-4640-af3e-f1236c255c79</Id>
+    <Name>1434</Name>
+    <Adress>234</Adress>
+    <Phone>4343</Phone>
+  </Contact>
+  <Contact>
+    <Id>4e8d9692-deb6-4dec-a19c-d5a03227726f</Id>
+    <Name>645645</Name>
+    <Adress>654645</Adress>
+    <Phone>456546</Phone>
+  </Contact>
+  <Contact>
+    <Id>a410ebcd-2c7b-4f63-8f24-10247ab7fa55</Id>
+  </Contact>
+</ArrayOfContact>

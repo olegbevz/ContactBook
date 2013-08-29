@@ -1,0 +1,25 @@
+﻿@using UMSSoft.ContactList.Models
+@model Contact
+
+@{
+    Layout = null;
+    ViewBag.Title = "Редактирование контакта";
+}
+
+ <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">@ViewBag.Title</h3>
+</div>
+<div class="modal-body">
+    @using (Html.BeginForm("EditContact", "Contact", new { id = "editstageform", @class = "nodisable" }))
+    {
+        <fieldset class="nodisable">
+            <br />
+             @{Html.RenderPartial("ContactPartial", Model);}
+            <div class="modal-footer">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Отменить</button>
+            </div>
+        </fieldset>
+    }
+</div>
