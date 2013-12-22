@@ -1,0 +1,19 @@
+﻿@model ContactBook.Models.Contact
+
+@Html.ValidationSummary(false)
+<div class="control-group">
+    @Html.HiddenFor(x => x.Id)
+</div>
+<div class="control-group">
+    @Html.LabelFor(x => x.Name)
+    @Html.EditorFor(x => x.Name)
+</div>
+<div class="control-group">
+    @Html.LabelFor(x => x.Address)
+    @Html.EditorFor(x => x.Address)
+</div>
+<div class="control-group">
+    @Html.LabelFor(x => x.Phone)
+    @Html.EditorFor(x => x.Phone)
+</div>
+

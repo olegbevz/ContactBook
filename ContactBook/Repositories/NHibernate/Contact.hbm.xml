@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" 
+                   namespace="ContactBook.Repositories.NHibernate" 
+                   assembly="ContactBook">
+ <class name="Contact" table="Contacts">
+  <id name="Id" type="Guid" unsaved-value="00000000-0000-0000-0000-000000000000">
+   <column name="Id" not-null="true" />
+    <generator class="guid.comb" />
+  </id>
+  <property name="Name" not-null="true"/>
+  <property name="Address" not-null="true"/>
+  <property name="Phone" not-null="true"/>
+ </class>
+</hibernate-mapping>
