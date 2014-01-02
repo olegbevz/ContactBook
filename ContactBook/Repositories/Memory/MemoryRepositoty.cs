@@ -1,21 +1,22 @@
-﻿namespace ContactBook.Models
+﻿namespace ContactBook.Repositories.Memory
 {
+    using ContactBook.Models;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
-    public class MemoryRepository : IContactRepository
+    public class ContactRepository : IContactRepository
     {
         private readonly IList<Contact> _contacts = new List<Contact>();
 
-        private static MemoryRepository _instance = new MemoryRepository();
+        private static ContactRepository _instance = new ContactRepository();
 
         /// <summary>
         /// Gets the instance.
         /// Статический экземпляр сущности
         /// </summary>
-        public static MemoryRepository Instance 
+        public static ContactRepository Instance 
         {
             get
             {

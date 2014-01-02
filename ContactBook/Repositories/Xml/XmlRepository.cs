@@ -1,5 +1,6 @@
-﻿namespace ContactBook.Models
+﻿namespace ContactBook.Repositories.Xml
 {
+    using ContactBook.Models;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -8,11 +9,11 @@
     using System.Reflection;
     using System.Xml.Serialization;
 
-    public class XmlRepository : IContactRepository
+    public class ContactRepository : IContactRepository
     {
         private string _filePath = string.Empty;
 
-        public XmlRepository(string filePath)
+        public ContactRepository(string filePath)
         {
             _filePath = filePath;
         }

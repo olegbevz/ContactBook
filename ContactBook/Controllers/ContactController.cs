@@ -24,7 +24,14 @@ namespace ContactBook.Controllers
 
         public ActionResult Index()
         {
-            return View(Repository);
+            try
+            {
+                return View(Repository.ToArray() ?? new Contact[0]);
+            }
+            catch
+            {
+                return View(new Contact[0]);
+            }            
         }
 
         public ActionResult CreateContact()
