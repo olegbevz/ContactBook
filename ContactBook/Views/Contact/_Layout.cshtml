@@ -9,8 +9,10 @@
     <script src="@Url.Content("~/Scripts/Bootstrap/bootstrap.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/Bootstrap/bootstrap-dropdown.js")" type="text/javascript"></script>
     <script type="text/javascript">
-        $('.dropdown-toggle').dropdown()
-        $().dropdown()
+        window.onload = function () {
+            $('.dropdown-toggle').dropdown()
+        }
+        
     </script>
     @*<script src="@Url.Content("~/Scripts/Bootstrap/bootstrap.min.js")" type="text/javascript"></script>*@
 </head>

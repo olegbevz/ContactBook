@@ -1,4 +1,5 @@
 ﻿@using ContactBook.Models
+@using ContactBook.Repositories
 @model IEnumerable<Contact>
 
 @{
@@ -7,29 +8,22 @@
 }
 
 <div>
-    @*<div class="btn-group">*@
-        @*<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                Memory
-                XML
-                ADO.NET
-                Linq to SQL Classes
-                Entity Framework
-                NHibernate
-        </a>*@
-        <ul class="nav nav-pills">
-            <li class="active"><a href="#">Ссылка</a></li>
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Меню <b class="caret"></b></a>
-                <ul id="menu1" class="dropdown-menu">
-                    <li><a href="#">Действие</a></li>
-                    <li><a href="#">Другое действие</a></li>
-                    <li><a href="#">Ссылка</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Отделенная ссылка</a></li>
-                </ul>
-            </li>
-        </ul>
-    @*</div>*@
+    <ul class="nav nav-pills">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Хранение данных: <b class="caret"></b></a>
+            <ul id="menu1" class="dropdown-menu">
+                <li><a href="@Url.Action("Index", new { dataSourceType = DataSourceType.Memory })">Memory</a></li>
+                <li class="divider"></li>
+                <li><a href="@Url.Action("Index", new { dataSourceType = DataSourceType.Xml })">XML</a></li>
+                <li><a href="@Url.Action("Index", new { dataSourceType = DataSourceType.LinqToXml })">Linq to XML</a></li>
+                <li class="divider"></li>
+                <li><a href="@Url.Action("Index", new { dataSourceType = DataSourceType.ADO })">ADO.NET</a></li>
+                <li><a href="@Url.Action("Index", new { dataSourceType = DataSourceType.LinqToSql })">Linq to SQL Classes</a></li>
+                <li><a href="@Url.Action("Index", new { dataSourceType = DataSourceType.EntityFramework })">Entity Framework</a></li>
+                <li><a href="@Url.Action("Index", new { dataSourceType = DataSourceType.NHibernate })">NHibernate</a></li>
+            </ul>
+        </li>
+    </ul>
     <table class="table table-bordered">
         <tr>
             <th>Полное имя</th>

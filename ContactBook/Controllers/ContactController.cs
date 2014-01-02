@@ -9,6 +9,7 @@ namespace ContactBook.Controllers
     using Ninject;
 
     using ContactBook.Models;
+using ContactBook.Repositories;
 
     public class ContactController : Controller
     {
@@ -22,7 +23,7 @@ namespace ContactBook.Controllers
             }
         }
 
-        public ActionResult Index()
+        public ActionResult Index(DataSourceType dataSourceType = DataSourceType.Memory)
         {
             try
             {
