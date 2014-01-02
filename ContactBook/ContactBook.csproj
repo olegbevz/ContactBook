@@ -158,6 +158,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\LinqToXml\ContactRepository.cs" />
     <Compile Include="Repositories\Memory\MemoryRepositoty.cs" />
     <Compile Include="Models\NinjectModule.cs" />
     <Compile Include="Repositories\NHibernate\Contact.cs" />
@@ -229,7 +230,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Repositories\LinqToXml\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
