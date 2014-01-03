@@ -9,24 +9,25 @@ namespace ContactBook.Controllers
     using Ninject;
 
     using ContactBook.Models;
-using ContactBook.Repositories;
+    using ContactBook.Repositories;
 
     public class ContactController : Controller
     {
-        public IContactRepository Repository { get; set; }
+        public static DataSourceType DataSourceType { get; set; }
 
         public ContactController()
         {
-            using (var kernel = new StandardKernel(new NinjectModule()))
-            {
-                Repository = kernel.Get<IContactRepository>();
-            }
+            var repositoryFactory = new RepositoryFactory();
+
+            Repository = repositoryFactory.CreateRepository(DataSourceType);
         }
+
+        public IContactRepository Repository { get; set; }        
 
         public ActionResult Index(DataSourceType dataSourceType = DataSourceType.Memory)
         {
             try
-            {
+            {       
                 return View(Repository.ToArray() ?? new Contact[0]);
             }
             catch
@@ -43,14 +44,20 @@ using ContactBook.Repositories;
         [HttpPost]
         public ActionResult CreateContact(Contact contact)
         {
-            Repository.Add(contact);
+            if (Repository != null)
+            {
+                Repository.Add(contact);
+            }            
 
             return RedirectToAction("Index");
         }
 
         public ActionResult RemoveContact(Guid id)
         {
-            Repository.Remove(id);
+            if (Repository != null)
+            {
+                Repository.Remove(id);
+            }            
 
             return RedirectToAction("Index");
         }
@@ -65,7 +72,17 @@ using ContactBook.Repositories;
         [HttpPost]
         public ActionResult EditContact(Contact contact)
         {
-            Repository.Save(contact);
+            if (Repository != null)
+            {
+                Repository.Save(contact);
+            }            
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult ChangeDataSource(DataSourceType dataSourceType)
+        {
+            DataSourceType = dataSourceType;
 
             return RedirectToAction("Index");
         }

@@ -159,12 +159,12 @@
       <DependentUpon>DataClasses.dbml</DependentUpon>
     </Compile>
     <Compile Include="Repositories\LinqToXml\ContactRepository.cs" />
-    <Compile Include="Repositories\Memory\MemoryRepositoty.cs" />
-    <Compile Include="Models\NinjectModule.cs" />
+    <Compile Include="Repositories\Memory\ContactRepositoty.cs" />
     <Compile Include="Repositories\NHibernate\Contact.cs" />
     <Compile Include="Repositories\NHibernate\ContactRepository.cs" />
+    <Compile Include="Repositories\RepositoryFactory.cs" />
     <Compile Include="Repositories\RepositoryType.cs" />
-    <Compile Include="Repositories\Xml\XmlRepository.cs" />
+    <Compile Include="Repositories\Xml\ContactRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

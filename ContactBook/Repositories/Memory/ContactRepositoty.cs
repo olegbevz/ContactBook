@@ -8,9 +8,9 @@
 
     public class ContactRepository : IContactRepository
     {
-        private readonly IList<Contact> _contacts = new List<Contact>();
+        private readonly IList<Contact> contacts = new List<Contact>();
 
-        private static ContactRepository _instance = new ContactRepository();
+        private static ContactRepository instance = new ContactRepository();
 
         /// <summary>
         /// Gets the instance.
@@ -20,7 +20,7 @@
         {
             get
             {
-                return _instance;
+                return instance;
             }
         }
 
@@ -33,7 +33,7 @@
         /// <filterpriority>1</filterpriority>
         public IEnumerator<Contact> GetEnumerator()
         {
-            return this._contacts.GetEnumerator();
+            return this.contacts.GetEnumerator();
         }
 
         /// <summary>
@@ -59,7 +59,7 @@
         /// </returns>
         public Contact Get(Guid id)
         {
-            return this._contacts.FirstOrDefault(x => x.Id.Equals(id));
+            return this.contacts.FirstOrDefault(x => x.Id.Equals(id));
         }
 
         /// <summary>
@@ -72,7 +72,7 @@
         {
             contact.Id = Guid.NewGuid();
 
-            this._contacts.Add(contact);
+            this.contacts.Add(contact);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@
         /// </param>
         public void Remove(Guid id)
         {
-            this._contacts.Remove(Get(id));
+            this.contacts.Remove(Get(id));
         }
 
         /// <summary>

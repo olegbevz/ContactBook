@@ -16,7 +16,7 @@ namespace ContactBook.Repositories.EntityFramework
     public partial class DomainContainer : DbContext
     {
         public DomainContainer()
-            : base("name=DomainContainer")
+            : base("name=EntityFrameworkConnectionString")
         {
         }
     

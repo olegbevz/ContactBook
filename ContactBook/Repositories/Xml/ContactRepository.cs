@@ -11,11 +11,11 @@
 
     public class ContactRepository : IContactRepository
     {
-        private string _filePath = string.Empty;
+        private string fileName = string.Empty;
 
-        public ContactRepository(string filePath)
+        public ContactRepository(string fileName)
         {
-            _filePath = filePath;
+            this.fileName = fileName;
         }
 
         /// <summary>
@@ -125,12 +125,12 @@
 
         private IEnumerable<Contact> GetAll()
         {
-            if (!File.Exists(_filePath))
+            if (!File.Exists(fileName))
             {
                 return new Contact[0];
             }
 
-            using (var fileStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 var serializer = new XmlSerializer(typeof(Contact[]));
 
@@ -140,7 +140,7 @@
 
         private void SaveAll(IEnumerable<Contact> contacts)
         {
-            using (var fileStream = new FileStream(_filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 var serializer = new XmlSerializer(typeof(Contact[]));
 
