@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ContactBook.Controllers
 {
-    using Ninject;
-
-    using ContactBook.Models;
-    using ContactBook.Repositories;
+    using Models;
+    using Repositories;
 
     public class ContactController : Controller
     {
@@ -28,7 +24,7 @@ namespace ContactBook.Controllers
         {
             try
             {       
-                return View(Repository.ToArray() ?? new Contact[0]);
+                return View(Repository.ToArray());
             }
             catch
             {
