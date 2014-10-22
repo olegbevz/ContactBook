@@ -1,6 +1,6 @@
 ﻿namespace ContactBook.Repositories.Memory
 {
-    using ContactBook.Models;
+    using Models;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -99,6 +99,17 @@
             existingContact.Name = contact.Name;
             existingContact.Address = contact.Address;
             existingContact.Phone = contact.Phone;
+        }
+
+
+        public void CreateStorage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteStorage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

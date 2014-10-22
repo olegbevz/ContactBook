@@ -4,7 +4,7 @@ using NHibernate.Cfg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using NHibernate.Tool.hbm2ddl;
 
 namespace ContactBook.Repositories.NHibernate
 {
@@ -23,7 +23,7 @@ namespace ContactBook.Repositories.NHibernate
                 .BuildSessionFactory();
         }
 
-        public ContactBook.Models.Contact Get(Guid id)
+        public Models.Contact Get(Guid id)
         {
             using (var session = this.sessionFactory.OpenSession())
             {
@@ -43,7 +43,7 @@ namespace ContactBook.Repositories.NHibernate
             }
         }
 
-        public void Add(ContactBook.Models.Contact contact)
+        public void Add(Models.Contact contact)
         {
             using (var session = this.sessionFactory.OpenSession())
             {
@@ -74,7 +74,7 @@ namespace ContactBook.Repositories.NHibernate
             }
         }
 
-        public void Save(ContactBook.Models.Contact contact)
+        public void Save(Models.Contact contact)
         {
             using (var session = this.sessionFactory.OpenSession())
             {
@@ -92,7 +92,7 @@ namespace ContactBook.Repositories.NHibernate
             }
         }
 
-        public IEnumerator<ContactBook.Models.Contact> GetEnumerator()
+        public IEnumerator<Models.Contact> GetEnumerator()
         {
             using (var session = this.sessionFactory.OpenSession())
             {
@@ -109,6 +109,24 @@ namespace ContactBook.Repositories.NHibernate
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+
+        public void CreateStorage()
+        {
+            Configuration cfg = new Configuration().Configure("hibernate.cfg.xml");
+
+            //add assembly in which the hbm.xml mappings are embedded (assuming Product class is in this assembly)
+            cfg.AddAssembly(typeof(Contact).Assembly);
+
+            //this will generate the SQL schema file in the executable folder
+            new SchemaExport(cfg).SetOutputFile("schema.sql").Execute(true, false, false);
+        }
+
+
+        public void DeleteStorage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

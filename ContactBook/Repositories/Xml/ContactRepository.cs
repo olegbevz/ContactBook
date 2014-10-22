@@ -1,12 +1,11 @@
 ﻿namespace ContactBook.Repositories.Xml
 {
-    using ContactBook.Models;
+    using Models;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Xml.Serialization;
 
     public class ContactRepository : IContactRepository
@@ -148,6 +147,18 @@
 
                 fileStream.Flush();
             }
+        }
+
+
+        public void CreateStorage()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void DeleteStorage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

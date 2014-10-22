@@ -14,20 +14,20 @@ namespace ContactBook.Repositories
             switch (dataSourceType)
             {
                 case DataSourceType.ADO:
-                    return new Repositories.ADO.ContactRepository();
+                    return new ADO.ContactRepository();
                 case DataSourceType.EntityFramework:
-                    return new Repositories.EntityFramework.ContactRepository();
+                    return new EntityFramework.ContactRepository();
                 case DataSourceType.LinqToSql:
-                    return new Repositories.LinqToSql.ContactRepository();
+                    return new LinqToSql.ContactRepository();
                 case DataSourceType.LinqToXml:
-                    return new Repositories.LinqToXml.ContactRepository(
+                    return new LinqToXml.ContactRepository(
                         CombineFileName("contactbook-linqtoxml.xml"));
                 case DataSourceType.Memory:
-                    return Repositories.Memory.ContactRepository.Instance;
+                    return Memory.ContactRepository.Instance;
                 case DataSourceType.NHibernate:
-                    return new Repositories.NHibernate.ContactRepository();
+                    return new NHibernate.ContactRepository();
                 case DataSourceType.Xml:
-                    return new Repositories.Xml.ContactRepository(
+                    return new Xml.ContactRepository(
                         CombineFileName("contactbook-xml.xml"));
                 default:
                     throw new NotImplementedException();

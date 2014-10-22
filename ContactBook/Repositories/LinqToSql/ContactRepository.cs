@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using ContactBook.Models;
 
 namespace ContactBook.Repositories.LinqToSql
@@ -82,9 +82,27 @@ namespace ContactBook.Repositories.LinqToSql
             }
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+
+        public void CreateStorage()
+        {
+            using (var context = new DataClassesDataContext())
+            {
+                context.CreateDatabase();
+            }
+        }
+
+
+        public void DeleteStorage()
+        {
+            using (var context = new DataClassesDataContext())
+            {
+                context.DeleteDatabase();
+            }
         }
     }
 }

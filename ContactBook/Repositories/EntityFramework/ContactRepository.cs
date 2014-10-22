@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Web;
-using ContactBook.Models;
-
-namespace ContactBook.Repositories.EntityFramework
+﻿namespace ContactBook.Repositories.EntityFramework
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Models;
+
     public class ContactRepository : IContactRepository
     {
-        public Models.Contact Get(Guid id)
+        public Contact Get(Guid id)
         {
             using (var context = new DomainContainer())
             {
@@ -29,7 +27,7 @@ namespace ContactBook.Repositories.EntityFramework
             }
         }
 
-        public void Add(Models.Contact contact)
+        public void Add(Contact contact)
         {
             using (var context = new DomainContainer())
             {
@@ -59,7 +57,7 @@ namespace ContactBook.Repositories.EntityFramework
             }
         }
 
-        public void Save(Models.Contact contact)
+        public void Save(Contact contact)
         {
             using (var context = new DomainContainer())
             {
@@ -78,7 +76,7 @@ namespace ContactBook.Repositories.EntityFramework
             }
         }
 
-        public IEnumerator<Models.Contact> GetEnumerator()
+        public IEnumerator<Contact> GetEnumerator()
         {
             using (var context = new DomainContainer())
             {
@@ -95,6 +93,23 @@ namespace ContactBook.Repositories.EntityFramework
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+
+        public void CreateStorage()
+        {
+            using (var context = new DomainContainer())
+            {
+                context.Database.Create();
+            }
+        }
+
+        public void DeleteStorage()
+        {
+            using (var context = new DomainContainer())
+            {
+                context.Database.Delete();
+            }
         }
     }
 }

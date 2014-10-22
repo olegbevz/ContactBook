@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Configuration;
 using ContactBook.Models;
 
@@ -145,6 +143,16 @@ namespace ContactBook.Repositories.ADO
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        public void CreateStorage()
+        {
+        }
+
+
+        public void DeleteStorage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

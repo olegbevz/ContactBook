@@ -56,8 +56,11 @@
     <button class="btn btn-info" onclick="onCreateContactButtonClick('@Url.Action("CreateContact")')">
         <i class="icon-white icon-plus"></i> Добавить контакт
     </button>
+    <div class="control-group">
+        @{ TimeSpan requestTime = ViewBag.ElapsedTime; }
+        @Html.Label("Время запроса: " + requestTime)
+    </div>
     <div class="modal" id="ModalDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden="false">
-    
 </div>
     <script type="text/javascript" src="../../Scripts/event-handlers.js">        
     </script>

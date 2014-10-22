@@ -40,5 +40,15 @@ namespace ContactBook.Models
         /// Сохраняемая модель
         /// </param>
         void Save(Contact contact);
+
+        /// <summary>
+        /// Создание базы данных
+        /// </summary>
+        void CreateStorage();
+
+        /// <summary>
+        /// Удалить базу данных
+        /// </summary>
+        void DeleteStorage();
     }
 }

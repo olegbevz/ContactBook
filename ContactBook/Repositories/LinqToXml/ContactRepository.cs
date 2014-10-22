@@ -1,10 +1,9 @@
-﻿using ContactBook.Models;
+﻿using System.Collections;
+using ContactBook.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace ContactBook.Repositories.LinqToXml
@@ -181,9 +180,21 @@ namespace ContactBook.Repositories.LinqToXml
             return new Contact[0].AsEnumerable().GetEnumerator();          
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+
+        public void CreateStorage()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void DeleteStorage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

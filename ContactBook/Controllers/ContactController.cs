@@ -22,14 +22,10 @@ namespace ContactBook.Controllers
 
         public ActionResult Index(DataSourceType dataSourceType = DataSourceType.Memory)
         {
-            try
-            {       
-                return View(Repository.ToArray());
-            }
-            catch
+            using (new StopWatchCalculator(StopWatchAction))
             {
-                return View(new Contact[0]);
-            }            
+                return View(Repository.ToArray());
+            }          
         }
 
         public ActionResult CreateContact()
@@ -40,17 +36,18 @@ namespace ContactBook.Controllers
         [HttpPost]
         public ActionResult CreateContact(Contact contact)
         {
-            if (Repository != null)
+            using (new StopWatchCalculator(StopWatchAction))
             {
                 Repository.Add(contact);
-            }            
+            }   
 
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
         public ActionResult RemoveContact(Guid id)
         {
-            if (Repository != null)
+            using (new StopWatchCalculator(StopWatchAction))
             {
                 Repository.Remove(id);
             }            
@@ -68,7 +65,7 @@ namespace ContactBook.Controllers
         [HttpPost]
         public ActionResult EditContact(Contact contact)
         {
-            if (Repository != null)
+            using (new StopWatchCalculator(StopWatchAction))
             {
                 Repository.Save(contact);
             }            
@@ -76,11 +73,17 @@ namespace ContactBook.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public ActionResult ChangeDataSource(DataSourceType dataSourceType)
         {
             DataSourceType = dataSourceType;
 
             return RedirectToAction("Index");
+        }
+
+        private void StopWatchAction(TimeSpan timeSpan)
+        {
+            this.ViewBag.ElapsedTime = timeSpan;
         }
     }
 }
