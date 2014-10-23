@@ -8,7 +8,7 @@
 
     public class ContactRepository : IContactRepository
     {
-        private readonly IList<Contact> contacts = new List<Contact>();
+        private IList<Contact> contacts;
 
         private static ContactRepository instance = new ContactRepository();
 
@@ -101,15 +101,19 @@
             existingContact.Phone = contact.Phone;
         }
 
-
-        public void CreateStorage()
+        public void Create()
         {
-            throw new NotImplementedException();
+            contacts = new List<Contact>();
         }
 
-        public void DeleteStorage()
+        public void Drop()
         {
-            throw new NotImplementedException();
+            contacts = null;
+        }
+
+        public bool Exist()
+        {
+            return contacts != null;
         }
     }
 }

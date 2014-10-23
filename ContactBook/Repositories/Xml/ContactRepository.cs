@@ -10,7 +10,7 @@
 
     public class ContactRepository : IContactRepository
     {
-        private string fileName = string.Empty;
+        private readonly string fileName = string.Empty;
 
         public ContactRepository(string fileName)
         {
@@ -150,13 +150,19 @@
         }
 
 
-        public void CreateStorage()
+        public void Create()
         {
             throw new NotImplementedException();
         }
 
 
-        public void DeleteStorage()
+        public void Drop()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool Exist()
         {
             throw new NotImplementedException();
         }

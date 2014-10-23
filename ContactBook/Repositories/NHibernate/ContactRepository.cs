@@ -112,7 +112,7 @@ namespace ContactBook.Repositories.NHibernate
         }
 
 
-        public void CreateStorage()
+        public void Create()
         {
             Configuration cfg = new Configuration().Configure("hibernate.cfg.xml");
 
@@ -124,7 +124,13 @@ namespace ContactBook.Repositories.NHibernate
         }
 
 
-        public void DeleteStorage()
+        public void Drop()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool Exist()
         {
             throw new NotImplementedException();
         }

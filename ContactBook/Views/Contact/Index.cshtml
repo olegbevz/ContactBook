@@ -56,6 +56,9 @@
     <button class="btn btn-info" onclick="onCreateContactButtonClick('@Url.Action("CreateContact")')">
         <i class="icon-white icon-plus"></i> Добавить контакт
     </button>
+    <button class="btn btn-info" onclick="">
+        <i class="icon-trash"></i> Удалить данные
+    </button>
     <div class="control-group">
         @{ TimeSpan requestTime = ViewBag.ElapsedTime; }
         @Html.Label("Время запроса: " + requestTime)

@@ -42,13 +42,19 @@ namespace ContactBook.Models
         void Save(Contact contact);
 
         /// <summary>
+        /// Проверка наличия базы данных
+        /// </summary>
+        /// <returns></returns>
+        bool Exist();
+
+        /// <summary>
         /// Создание базы данных
         /// </summary>
-        void CreateStorage();
+        void Create();
 
         /// <summary>
         /// Удалить базу данных
         /// </summary>
-        void DeleteStorage();
+        void Drop();
     }
 }

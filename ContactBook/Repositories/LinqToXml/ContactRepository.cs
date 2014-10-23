@@ -186,13 +186,19 @@ namespace ContactBook.Repositories.LinqToXml
         }
 
 
-        public void CreateStorage()
+        public void Create()
         {
             throw new NotImplementedException();
         }
 
 
-        public void DeleteStorage()
+        public void Drop()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool Exist()
         {
             throw new NotImplementedException();
         }

@@ -88,7 +88,7 @@ namespace ContactBook.Repositories.LinqToSql
         }
 
 
-        public void CreateStorage()
+        public void Create()
         {
             using (var context = new DataClassesDataContext())
             {
@@ -97,12 +97,18 @@ namespace ContactBook.Repositories.LinqToSql
         }
 
 
-        public void DeleteStorage()
+        public void Drop()
         {
             using (var context = new DataClassesDataContext())
             {
                 context.DeleteDatabase();
             }
+        }
+
+
+        public bool Exist()
+        {
+            throw new NotImplementedException();
         }
     }
 }

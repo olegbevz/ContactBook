@@ -25,9 +25,7 @@ function onRemoveContactButtonClick(url) {
 }
 
 function showDialog(dialogID, urlForDialogContent) {
-    //alert(urlForDialogContent);
     $.get(urlForDialogContent, function (data) {
-        //alert(data);
         $(dialogID).html(data);
         $(dialogID).modal('show');
     });

@@ -11,7 +11,7 @@ namespace ContactBook.Repositories.ADO
 {
     public class ContactRepository : IContactRepository
     {  
-        private string connectionString;
+        private readonly string connectionString;
 
         public ContactRepository()
         {
@@ -145,12 +145,18 @@ namespace ContactBook.Repositories.ADO
             return this.GetEnumerator();
         }
 
-        public void CreateStorage()
+        public void Create()
         {
         }
 
 
-        public void DeleteStorage()
+        public void Drop()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool Exist()
         {
             throw new NotImplementedException();
         }

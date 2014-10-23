@@ -14,7 +14,7 @@
                 var contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(id));
                 if (contactEntity != null)
                 {
-                    return new Models.Contact
+                    return new Contact
                     {
                         Id = contactEntity.Id,
                         Name = contactEntity.Name,
@@ -96,7 +96,7 @@
         }
 
 
-        public void CreateStorage()
+        public void Create()
         {
             using (var context = new DomainContainer())
             {
@@ -104,12 +104,18 @@
             }
         }
 
-        public void DeleteStorage()
+        public void Drop()
         {
             using (var context = new DomainContainer())
             {
                 context.Database.Delete();
             }
+        }
+
+
+        public bool Exist()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -22,15 +22,48 @@ namespace ContactBook.Controllers
 
         public ActionResult Index(DataSourceType dataSourceType = DataSourceType.Memory)
         {
+            if (!Repository.Exist())
+            {
+                return RedirectToAction("CreateRepository");
+            }
+
             using (new StopWatchCalculator(StopWatchAction))
             {
                 return View(Repository.ToArray());
             }          
         }
 
+        [HttpGet]
+        public ActionResult CreateRepository()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult CreateRepository(DataSourceType dataSourceType = DataSourceType.Memory)
+        {
+            using (new StopWatchCalculator(StopWatchAction))
+            {
+                Repository.Create();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult DropRepository()
+        {
+            using (new StopWatchCalculator(StopWatchAction))
+            {
+                Repository.Drop();
+            }
+
+            return RedirectToAction("CreateRepository");
+        }
+
         public ActionResult CreateContact()
         {
-            return this.View();
+            return View();
         }
 
         [HttpPost]
