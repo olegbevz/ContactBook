@@ -39,7 +39,7 @@ namespace ContactBook.Repositories.LinqToXml
                                 Phone = contactNode.Attribute("Phone").Value
                             };
                         }
-                    }                    
+                    }
                 }
             }
 
@@ -152,7 +152,23 @@ namespace ContactBook.Repositories.LinqToXml
                 {
                     targetDocument.Save(fileStream);
                 }
-            }        
+            }
+        }
+
+        public void Create()
+        {
+            var targetDocument = new XDocument(new XElement("ContactBook"));
+            targetDocument.Save(fileName);
+        }
+
+        public void Drop()
+        {
+            File.Delete(fileName);
+        }
+
+        public bool Exist()
+        {
+            return File.Exists(fileName);
         }
 
         public IEnumerator<Contact> GetEnumerator()
@@ -183,24 +199,6 @@ namespace ContactBook.Repositories.LinqToXml
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
-        }
-
-
-        public void Create()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public void Drop()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public bool Exist()
-        {
-            throw new NotImplementedException();
         }
     }
 }

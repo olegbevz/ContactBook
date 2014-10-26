@@ -87,7 +87,6 @@
             var contacts = this.GetAll().ToList();
 
             var contact = contacts.FirstOrDefault(x => x.Id.Equals(id));
-
             if (contact == null)
             {
                 throw new Exception("Удаление несуществующей модели.");
@@ -109,7 +108,6 @@
             var contacts = this.GetAll();
 
             var existingContact = contacts.FirstOrDefault(x => x.Id.Equals(contact.Id));
-
             if (existingContact == null)
             {
                 throw new Exception("Сохранение несуществующей модели данных.");
@@ -120,6 +118,28 @@
             existingContact.Address = contact.Address;
 
             this.SaveAll(contacts);
+        }
+
+        public void Create()
+        {
+            using (var fileStream = File.Create(fileName))
+            {
+                var serializer = new XmlSerializer(typeof(Contact[]));
+
+                serializer.Serialize(fileStream, new Contact[0]);
+
+                fileStream.Flush();
+            };
+        }
+
+        public void Drop()
+        {
+            File.Delete(fileName);
+        }
+
+        public bool Exist()
+        {
+            return File.Exists(fileName);
         }
 
         private IEnumerable<Contact> GetAll()
@@ -147,24 +167,6 @@
 
                 fileStream.Flush();
             }
-        }
-
-
-        public void Create()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public void Drop()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public bool Exist()
-        {
-            throw new NotImplementedException();
         }
     }
 }

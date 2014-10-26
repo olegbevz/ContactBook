@@ -115,7 +115,10 @@
 
         public bool Exist()
         {
-            throw new NotImplementedException();
+            using (var context = new DomainContainer())
+            {
+                return context.Database.Exists();
+            }
         }
     }
 }

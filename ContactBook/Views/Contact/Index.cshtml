@@ -1,7 +1,7 @@
 ﻿@using ContactBook.Models
 @using ContactBook.Repositories
 @using ContactBook.Controllers
-@model IEnumerable<Contact>
+@model ContactsViewModel
 
 @{
     ViewBag.Title = "Записная книжка для контактов";
@@ -12,7 +12,7 @@
     <div>
         <ul class="nav nav-pills">
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">Выберите способ хранения данных (@ContactController.DataSourceType.ToString())<b class="caret"></b></a>
+                <a class="dropdown-toggle" data-toggle="dropdown">Выберите способ хранения данных (@Model.DataSourceType.ToString())<b class="caret"></b></a>
                 <ul id="menu1" class="dropdown-menu">
                     <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = DataSourceType.Memory })">Memory</a></li>
                     <li class="divider"></li>
@@ -27,42 +27,50 @@
             </li>
         </ul>
     </div>
-    <table class="table table-bordered">
-        <tr>
-            <th>Полное имя</th>
-            <th>Адрес</th>
-            <th>Телефон</th>
-            <th>Действия</th>
-        </tr>
-        <tbody>
-            @foreach (var contact in Model)
-            {
-                <tr>
-                    <td>@contact.Name</td>
-                    <td>@contact.Address</td>
-                    <td>@contact.Phone</td>
-                    <td>
-                        <button class="btn btn-small" onclick="onEditContactButtonClick('@Url.Action("EditContact", new { contact.Id })')">
-                            <i class="icon-pencil" title="Редактировать"></i>
-                        </button>
-                        <button class="btn btn-small" onclick="onRemoveContactButtonClick('@Url.Action("RemoveContact", new { contact.Id })')">
-                            <i class="icon-trash" title="Удалить"></i>
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <button class="btn btn-info" onclick="onCreateContactButtonClick('@Url.Action("CreateContact")')">
-        <i class="icon-white icon-plus"></i> Добавить контакт
-    </button>
-    <button class="btn btn-info" onclick="onDropRepositoryButtonClick()">
-        <i class="icon-trash"></i> Удалить данные
-    </button>
-    <div class="control-group">
-        @{ TimeSpan requestTime = ViewBag.ElapsedTime; }
-        @Html.Label("Время запроса: " + requestTime)
-    </div>
+    @if (Model.DataSourceExists) {
+        <table class="table table-bordered">
+            <tr>
+                <th>Полное имя</th>
+                <th>Адрес</th>
+                <th>Телефон</th>
+                <th>Действия</th>
+            </tr>
+            <tbody>
+                @foreach (var contact in Model.Contacts)
+                {
+                    <tr>
+                        <td>@contact.Name</td>
+                        <td>@contact.Address</td>
+                        <td>@contact.Phone</td>
+                        <td>
+                            <button class="btn btn-small" onclick="onEditContactButtonClick('@Url.Action("EditContact", new { contact.Id })')">
+                                <i class="icon-pencil" title="Редактировать"></i>
+                            </button>
+                            <button class="btn btn-small" onclick="onRemoveContactButtonClick('@Url.Action("RemoveContact", new { contact.Id })')">
+                                <i class="icon-trash" title="Удалить"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button class="btn btn-info" onclick="onCreateContactButtonClick('@Url.Action("CreateContact")')">
+            <i class="icon-white icon-plus"></i> Добавить контакт
+        </button>
+        <button class="btn btn-info" onclick="onDropRepositoryButtonClick()">
+            <i class="icon-trash"></i> Удалить данные
+        </button>
+        <div class="control-group">
+            @{ TimeSpan requestTime = ViewBag.ElapsedTime; }
+            @Html.Label("Время запроса: " + requestTime)
+        </div>
+    }
+    else
+    {
+         <button class="btn btn-info" onclick="onCreateRepositoryButtonClick()">
+            Создать хранилище данных
+        </button>
+    }
     <div class="modal" id="ModalDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden="false">
 </div>
     <script type="text/javascript" src="../../Scripts/event-handlers.js">        
@@ -70,6 +78,22 @@
     <script type="text/javascript" src="../../Scripts/navigation.js">
     </script>
     <script type="text/javascript">
+        function onCreateContactButtonClick(url) {
+            showDialog('#ModalDialog', url);
+        }
+
+        function onEditContactButtonClick(url) {
+            showDialog('#ModalDialog', url);
+        }
+
+        function onRemoveContactButtonClick(url) {
+            if (confirm("Вы действительно хотите удалить контакт?")) {
+                navigation.navigate(url);
+            }
+        }
+        function onCreateRepositoryButtonClick() {
+            navigation.navigate('@Url.Action("CreateRepository")', { dataSourceType: '@Model.DataSourceType.ToString()' });
+        }
         function onDropRepositoryButtonClick() {
             if (confirm("Удалить данные?")) {
                 navigation.navigate('@Url.Action("DropRepository")');

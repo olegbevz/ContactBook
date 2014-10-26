@@ -108,7 +108,10 @@ namespace ContactBook.Repositories.LinqToSql
 
         public bool Exist()
         {
-            throw new NotImplementedException();
+            using (var context = new DataClassesDataContext())
+            {
+                return context.DatabaseExists();
+            }
         }
     }
 }

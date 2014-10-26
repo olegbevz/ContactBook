@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -116,6 +117,61 @@ namespace ContactBook.Repositories.ADO
             }
         }
 
+        public void Create()
+        {
+            var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master" };
+            using (var connection = new SqlConnection(connectionStringBuilder.ToString()))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(@"CREATE DATABASE ContactBook;", connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(
+                    @"CREATE TABLE [dbo].[Contacts] ([Id] uniqueidentifier NOT NULL, [Name] nvarchar(max) NOT NULL, [Address] nvarchar(max) NOT NULL, [Phone] nvarchar(max) NOT NULL);
+                    ALTER TABLE [dbo].[Contacts] ADD CONSTRAINT [PK_Contacts] PRIMARY KEY CLUSTERED ([Id] ASC);", 
+                    connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void Drop()
+        {
+            var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master" };
+
+            using (var connection = new SqlConnection(connectionStringBuilder.ToString()))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("DROP DATABASE ContactBook;", connection))
+                {
+                    var rowsChanged = command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public bool Exist()
+        {
+            var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master" };
+
+            using (var connection = new SqlConnection(connectionStringBuilder.ToString()))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT count(*) FROM master.sys.databases WHERE name = @database", connection))
+                {
+                    command.Parameters.AddWithValue("database", "ContactBook");
+                    var queryResult = command.ExecuteScalar();
+                    return (int)queryResult > 0;
+                }
+            }
+        }
+
         public IEnumerator<Contact> GetEnumerator()
         {
             using (var connection = new SqlConnection(this.connectionString))
@@ -127,6 +183,7 @@ namespace ContactBook.Repositories.ADO
                         connection.Open();
                         var dataSet = new DataSet();
                         tableAdapter.Fill(dataSet);
+                        tableAdapter.Dispose();
                         return dataSet.Tables[0].Rows.Cast<DataRow>()
                             .Select(row => new Contact
                         {
@@ -140,25 +197,9 @@ namespace ContactBook.Repositories.ADO
             }
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
-        }
-
-        public void Create()
-        {
-        }
-
-
-        public void Drop()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public bool Exist()
-        {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
     }
 }

@@ -130,6 +130,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Repositories\ADO\ContactRepository.cs" />
     <Compile Include="Repositories\EntityFramework\ContactEntity.cs">
       <DependentUpon>Domain.tt</DependentUpon>
