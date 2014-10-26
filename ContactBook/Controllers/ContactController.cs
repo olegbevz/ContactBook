@@ -58,7 +58,7 @@ namespace ContactBook.Controllers
                 Repository.Drop();
             }
 
-            return RedirectToAction("CreateRepository");
+            return RedirectToAction("Index");
         }
 
         public ActionResult CreateContact()

@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "Записная книжка для контактов";
     Layout = "_Layout.cshtml";
-    DataSourceType dataSourceType = DataSourceType.Memory; 
 }
 
 <h2>Данные отсутствуют</h2>
@@ -10,38 +9,42 @@
     <div>
         <ul class="nav nav-pills">
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">Выберите способ хранения данных<b class="caret"></b></a>
+                <a class="dropdown-toggle" data-toggle="dropdown">Выберите способ хранения данных (Memory)<b class="caret"></b></a>
                 <ul id="menu" class="dropdown-menu">
-                    <li><a onclick="onDataSourceDropDownItemSelected($(this))">Memory</a></li>
+                    <li class='active'><a onclick="onDataSourceDropDownItemSelected($(this))" data-value="@DataSourceType.Memory" id="66">Memory</a></li>
                     <li class="divider"></li>
-                    <li><a onclick="onDataSourceDropDownItemSelected($(this))">XML</a></li>
-                    <li><a onclick="onDataSourceDropDownItemSelected($(this))">Linq to XML</a></li>
+                    <li><a onclick="onDataSourceDropDownItemSelected($(this))" data-value="@DataSourceType.Xml">XML</a></li>
+                    <li><a onclick="onDataSourceDropDownItemSelected($(this))" data-value="@DataSourceType.LinqToXml">Linq to XML</a></li>
                     <li class="divider"></li>
-                    <li><a onclick="onDataSourceDropDownItemSelected($(this))">ADO.NET</a></li>
-                    <li><a onclick="onDataSourceDropDownItemSelected($(this))">Linq to SQL Classes</a></li>
-                    <li><a onclick="onDataSourceDropDownItemSelected($(this))">Entity Framework</a></li>
-                    <li><a onclick="onDataSourceDropDownItemSelected($(this))">NHibernate</a></li>
+                    <li><a onclick="onDataSourceDropDownItemSelected($(this))" data-value="@DataSourceType.ADO">ADO.NET</a></li>
+                    <li><a onclick="onDataSourceDropDownItemSelected($(this))" data-value="@DataSourceType.LinqToSql">Linq to SQL Classes</a></li>
+                    <li><a onclick="onDataSourceDropDownItemSelected($(this))" data-value="@DataSourceType.EntityFramework">Entity Framework</a></li>
+                    <li><a onclick="onDataSourceDropDownItemSelected($(this))" data-value="@DataSourceType.NHibernate">NHibernate</a></li>
                 </ul>
             </li>
         </ul>
     </div>
-    <button class="btn btn-info">
-        <a href="@Url.Action("CreateRepository", new { dataSourceType })">Создать хранилище данных</a>
+    <button class="btn btn-info" onclick="onCreateRepositoryButtonClick()">
+        Создать хранилище данных
     </button>
 </div>
 <div>
-<script type="text/javascript">
-    function onDataSourceDropDownItemSelected(sender) {
-        $("a.dropdown-toggle").text("Выберите способ хранения данных (" + sender.text() + ")");
-        $("ul.dropdown-menu li").each(function () {
-            $(this).removeClass();
-        });
-        sender.parent().addClass("active");
-    }
+    <script type="text/javascript" src="../../Scripts/navigation.js">
+    </script>
+    <script type="text/javascript">
+        function onDataSourceDropDownItemSelected(sender) {
+            $('a.dropdown-toggle').text("Выберите способ хранения данных (" + sender.text() + ")");
+            $('ul.dropdown-menu li').each(function() {
+                $(this).removeClass();
+            });
+            sender.parent().addClass('active');
+        }
 
-    function onCreateRepositoryButtonClick() {
-
-        $.post("@Url.Action("CreateRepository")");
-    }
-</script>
+        function onCreateRepositoryButtonClick() {
+            var dataSource = $('ul.dropdown-menu li.active a').data('value');
+            if (dataSource) {
+                navigation.navigate('@Url.Action("CreateRepository")', { dataSourceType: dataSource.toString() });
+            }
+        }
+    </script>
 </div>

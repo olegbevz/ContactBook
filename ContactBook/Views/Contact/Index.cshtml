@@ -56,7 +56,7 @@
     <button class="btn btn-info" onclick="onCreateContactButtonClick('@Url.Action("CreateContact")')">
         <i class="icon-white icon-plus"></i> Добавить контакт
     </button>
-    <button class="btn btn-info" onclick="">
+    <button class="btn btn-info" onclick="onDropRepositoryButtonClick()">
         <i class="icon-trash"></i> Удалить данные
     </button>
     <div class="control-group">
@@ -66,5 +66,14 @@
     <div class="modal" id="ModalDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden="false">
 </div>
     <script type="text/javascript" src="../../Scripts/event-handlers.js">        
+    </script>
+    <script type="text/javascript" src="../../Scripts/navigation.js">
+    </script>
+    <script type="text/javascript">
+        function onDropRepositoryButtonClick() {
+            if (confirm("Удалить данные?")) {
+                navigation.navigate('@Url.Action("DropRepository")');
+            }
+        }
     </script>
 </div>
