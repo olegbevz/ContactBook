@@ -10,7 +10,7 @@
 3. Синглтон (MemoryRepository.Instance)
 4. Абстрактная фабрика (IoC : Ninject)
 
-// TODO: Удаление базы данных для ADO.NET
-// TODO: CREATE/DROP DATABASE для NHibernate
+// TODO: Удаление базы данных для ADO.NET (разобраться с проблемой освобождения подключения)
+// TODO: CREATE/DROP DATABASE для NHibernate (ручное удаление базы данных)
 // TODO: Отображение времени выполнения запросов в секундах
 // TODO: Краткое описание источников данных на основной станице (база MSSQL, файл xml, память)
