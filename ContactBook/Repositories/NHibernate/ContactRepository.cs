@@ -1,31 +1,32 @@
-﻿using ContactBook.Models;
-using NHibernate;
+﻿using System.Collections;
+using System.Linq;
+using ContactBook.Models;
 using NHibernate.Cfg;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using NHibernate.Tool.hbm2ddl;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace ContactBook.Repositories.NHibernate
 {
     public class ContactRepository : IContactRepository
     {
-        private ISessionFactory sessionFactory;
+        private readonly Configuration configuration;
 
-        public ContactRepository()
+        public ContactRepository(string connectionString)
         {
             var assembly = this.GetType().Assembly;
 
-            var ress = assembly.GetManifestResourceNames();
-
-            this.sessionFactory = new Configuration()
+            this.configuration = new Configuration()
                 .Configure(assembly, "ContactBook.Repositories.NHibernate.hibernate.cfg.xml")
-                .BuildSessionFactory();
+                .SetProperty(Environment.ConnectionString, connectionString);;
         }
 
         public Models.Contact Get(Guid id)
         {
-            using (var session = this.sessionFactory.OpenSession())
+            var sessionFactory = configuration.BuildSessionFactory();
+
+            using (var session = sessionFactory.OpenSession())
             {
                 var contactEntity = session.Get<Contact>(id);
                 if (contactEntity != null)
@@ -45,7 +46,9 @@ namespace ContactBook.Repositories.NHibernate
 
         public void Add(Models.Contact contact)
         {
-            using (var session = this.sessionFactory.OpenSession())
+            var sessionFactory = configuration.BuildSessionFactory();
+
+            using (var session = sessionFactory.OpenSession())
             {
                 var contactEntity = new Contact
                 {
@@ -62,7 +65,9 @@ namespace ContactBook.Repositories.NHibernate
 
         public void Remove(Guid id)
         {
-            using (var session = this.sessionFactory.OpenSession())
+            var sessionFactory = configuration.BuildSessionFactory();
+
+            using (var session = sessionFactory.OpenSession())
             {
                 var contactEntity = session.Get<Contact>(id);
                 if (contactEntity != null)
@@ -76,7 +81,9 @@ namespace ContactBook.Repositories.NHibernate
 
         public void Save(Models.Contact contact)
         {
-            using (var session = this.sessionFactory.OpenSession())
+            var sessionFactory = configuration.BuildSessionFactory();
+
+            using (var session = sessionFactory.OpenSession())
             {
                 var contactEntity = new Contact
                 {
@@ -94,7 +101,9 @@ namespace ContactBook.Repositories.NHibernate
 
         public IEnumerator<Models.Contact> GetEnumerator()
         {
-            using (var session = this.sessionFactory.OpenSession())
+            var sessionFactory = configuration.BuildSessionFactory();
+
+            using (var session = sessionFactory.OpenSession())
             {
                 return session.QueryOver<Contact>().List().Select(contactEntity => new Models.Contact
                     {
@@ -106,33 +115,38 @@ namespace ContactBook.Repositories.NHibernate
             }            
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
 
-
         public void Create()
         {
-            Configuration cfg = new Configuration().Configure("hibernate.cfg.xml");
+            var schemaExport = new SchemaExport(configuration);
 
-            //add assembly in which the hbm.xml mappings are embedded (assuming Product class is in this assembly)
-            cfg.AddAssembly(typeof(Contact).Assembly);
-
-            //this will generate the SQL schema file in the executable folder
-            new SchemaExport(cfg).SetOutputFile("schema.sql").Execute(true, false, false);
+            schemaExport.Create(false, true);
         }
-
 
         public void Drop()
         {
-            throw new NotImplementedException();
-        }
+            var schemaExport = new SchemaExport(configuration);
 
+            schemaExport.Drop(false, true);
+        }
 
         public bool Exist()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var myvalidator = new SchemaValidator(this.configuration);
+
+                myvalidator.Validate();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

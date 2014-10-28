@@ -1,4 +1,5 @@
-﻿using ContactBook.Models;
+﻿using System.Configuration;
+using ContactBook.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +26,8 @@ namespace ContactBook.Repositories
                 case DataSourceType.Memory:
                     return Memory.ContactRepository.Instance;
                 case DataSourceType.NHibernate:
-                    return new NHibernate.ContactRepository();
+                    var connectionString = ConfigurationManager.ConnectionStrings["ContactBookConnectionString"].ToString();
+                    return new NHibernate.ContactRepository(connectionString);
                 case DataSourceType.Xml:
                     return new Xml.ContactRepository(
                         CombineFileName("contactbook-xml.xml"));
