@@ -9,28 +9,21 @@ namespace ContactBook.Controllers
 
     public class ContactController : Controller
     {
-        public static DataSourceType DataSourceType { get; private set; }
-
-        private readonly IContactRepository repository;   
-
-        public ContactController()
-        {
-            var repositoryFactory = new RepositoryFactory();
-
-            repository = repositoryFactory.CreateRepository(DataSourceType);
-        }
+        private static readonly RepositoryFactory repositoryFactory = new RepositoryFactory();
 
         [HttpGet]
         public ActionResult Index()
         {
+            var repository = repositoryFactory.CreateRepository(GetDataSourceType());
+
             if (!repository.Exist())
             {
-                return View(new ContactsViewModel(DataSourceType, false, new Contact[0]));
+                return View(new ContactsViewModel(GetDataSourceType(), false, new Contact[0]));
             }
 
             using (var stopWatch = new StopWatchCalculator())
             {
-                return View(new ContactsViewModel(DataSourceType, true, repository.ToArray(), stopWatch.ElapsedTime));
+                return View(new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
             }          
         }
         
@@ -39,9 +32,8 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                var repositoryFactory = new RepositoryFactory();
-                var temporaryRepository = repositoryFactory.CreateRepository(dataSourceType);
-                temporaryRepository.Create();
+                var repository = repositoryFactory.CreateRepository(dataSourceType);
+                repository.Create();
                 return View("Index", new ContactsViewModel(dataSourceType, true, new Contact[0], stopWatch.ElapsedTime));
             }
         }
@@ -51,16 +43,17 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
+                var repository = repositoryFactory.CreateRepository(GetDataSourceType());
                 repository.Drop();
-                return View("Index", new ContactsViewModel(DataSourceType, false, new Contact[0], stopWatch.ElapsedTime));
+                return View("Index", new ContactsViewModel(GetDataSourceType(), false, new Contact[0], stopWatch.ElapsedTime));
             }
         }
 
         [HttpGet]
         public ActionResult ChangeDataSource(DataSourceType dataSourceType)
         {
-            DataSourceType = dataSourceType;
-
+            SetDataSourceType(dataSourceType);
+            
             return RedirectToAction("Index");
         }
 
@@ -75,8 +68,9 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
+                var repository = repositoryFactory.CreateRepository(GetDataSourceType());
                 repository.Add(contact);
-                return View("Index", new ContactsViewModel(DataSourceType, true, repository.ToArray(), stopWatch.ElapsedTime));
+                return View("Index", new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
             }   
         }
 
@@ -85,14 +79,16 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
+                var repository = repositoryFactory.CreateRepository(GetDataSourceType());
                 repository.Remove(id);
-                return View("Index", new ContactsViewModel(DataSourceType, true, repository.ToArray(), stopWatch.ElapsedTime));
+                return View("Index", new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
             }            
         }
 
         [HttpGet]
         public ActionResult EditContact(Guid id)
         {
+            var repository = repositoryFactory.CreateRepository(GetDataSourceType());
             var contact = repository.Get(id);
 
             return this.View(contact);
@@ -103,9 +99,34 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
+                var repository = repositoryFactory.CreateRepository(GetDataSourceType());
                 repository.Save(contact);
-                return View("Index", new ContactsViewModel(DataSourceType, true, repository.ToArray(), stopWatch.ElapsedTime));
+                return View("Index", new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
             }
+        }
+
+        private void SetDataSourceType(DataSourceType dataSourceType)
+        {
+            if (HttpContext != null && HttpContext.Session != null)
+            {
+                HttpContext.Session["DataSourceType"] = dataSourceType;
+            }
+        }
+
+        private DataSourceType GetDataSourceType()
+        {
+            if (HttpContext == null || HttpContext.Session == null)
+            {
+                return DataSourceType.Memory;
+            }
+
+            var obj = HttpContext.Session["DataSourceType"];
+            if (obj == null)
+            {
+                return DataSourceType.Memory;;
+            }
+
+            return (DataSourceType)obj;
         }
     }
 }
