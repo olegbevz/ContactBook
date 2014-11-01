@@ -27,7 +27,8 @@
             </li>
         </ul>
     </div>
-    @if (Model.DataSourceExists) {
+    @if (Model.DataSourceExists)
+    {
         <table class="table table-bordered">
             <tr>
                 <th>Полное имя</th>
@@ -60,20 +61,25 @@
         <button class="btn btn-info" onclick="onDropRepositoryButtonClick()">
             <i class="icon-trash"></i> Удалить данные
         </button>
-        <div class="control-group">
-            @{ TimeSpan requestTime = ViewBag.ElapsedTime; }
-            @Html.Label("Время запроса: " + requestTime)
-        </div>
     }
     else
     {
-         <button class="btn btn-info" onclick="onCreateRepositoryButtonClick()">
+        <button class="btn btn-info" onclick="onCreateRepositoryButtonClick()">
             Создать хранилище данных
         </button>
     }
+    <div class="navbar-fixed-bottom row-fluid navbar-inverse">
+        <div class="navbar-inner">
+            <div class="container">
+                <font color="white">Время выполнения последнего запроса: @Model.RequestTime.TotalMilliseconds мc.</font>
+            </div>
+        </div>
+    </div>
     <div class="modal" id="ModalDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden="false">
-</div>
-    <script type="text/javascript" src="../../Scripts/event-handlers.js">        
+    </div>
+
+    <script type="text/javascript" src="../../Scripts/event-handlers.js">
+
     </script>
     <script type="text/javascript" src="../../Scripts/navigation.js">
     </script>
@@ -101,3 +107,4 @@
         }
     </script>
 </div>
+

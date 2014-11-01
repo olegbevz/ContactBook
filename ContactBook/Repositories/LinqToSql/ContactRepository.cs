@@ -96,7 +96,6 @@ namespace ContactBook.Repositories.LinqToSql
             }
         }
 
-
         public void Drop()
         {
             using (var context = new DataClassesDataContext())
@@ -104,7 +103,6 @@ namespace ContactBook.Repositories.LinqToSql
                 context.DeleteDatabase();
             }
         }
-
 
         public bool Exist()
         {

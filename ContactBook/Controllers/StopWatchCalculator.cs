@@ -7,20 +7,19 @@ namespace ContactBook.Controllers
     {
         private readonly Stopwatch stopwatch = new Stopwatch();
 
-        private readonly Action<TimeSpan> stopAction; 
-
-        public StopWatchCalculator(Action<TimeSpan> stopAction)
+        public StopWatchCalculator()
         {
-            this.stopAction = stopAction;
-
             stopwatch.Start();
+        }
+
+        public TimeSpan ElapsedTime
+        {
+            get { return stopwatch.Elapsed; }
         }
 
         public void Dispose()
         {
             stopwatch.Stop();
-
-            stopAction(stopwatch.Elapsed);
         }
     }
 }
