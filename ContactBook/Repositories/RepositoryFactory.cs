@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Web.Configuration;
 using ContactBook.Models;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace ContactBook.Repositories
             switch (dataSourceType)
             {
                 case DataSourceType.ADO:
-                    return new ADO.ContactRepository();
+                    return new ADO.ContactRepository(GetConnectionString("ContactBookConnectionString"), GetConnectionString("MasterConnectionString"));
                 case DataSourceType.EntityFramework:
                     return new EntityFramework.ContactRepository();
                 case DataSourceType.LinqToSql:
@@ -26,8 +27,7 @@ namespace ContactBook.Repositories
                 case DataSourceType.Memory:
                     return Memory.ContactRepository.Instance;
                 case DataSourceType.NHibernate:
-                    var connectionString = ConfigurationManager.ConnectionStrings["ContactBookConnectionString"].ToString();
-                    return new NHibernate.ContactRepository(connectionString);
+                    return new NHibernate.ContactRepository(GetConnectionString("ContactBookConnectionString"), GetConnectionString("MasterConnectionString"));
                 case DataSourceType.Xml:
                     return new Xml.ContactRepository(
                         CombineFileName("contactbook-xml.xml"));
@@ -46,6 +46,24 @@ namespace ContactBook.Repositories
             }
 
             return Path.Combine(directory, fileName);
+        }
+
+        private string GetConnectionString(string connectionStringName)
+        {
+            var connectionStringsSection = ConfigurationManager.ConnectionStrings;
+
+            if (connectionStringsSection == null)
+            {
+                throw new Exception("Connection strings section not found.");
+            }
+
+            var connectionStringSettings = connectionStringsSection[connectionStringName];
+            if (connectionStringSettings == null)
+            {
+                throw new Exception("Connection string not found");
+            }
+
+            return connectionStringSettings.ConnectionString;
         }
     }
 }

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Web.Configuration;
 using ContactBook.Models;
 
 namespace ContactBook.Repositories.ADO
@@ -14,26 +12,13 @@ namespace ContactBook.Repositories.ADO
     {  
         private readonly string connectionString;
 
-        public ContactRepository()
+        private readonly string masterConnectionString;
+
+        public ContactRepository(string connectionString, string masterConnectionString)
         {
-            var connectionStringsSection = WebConfigurationManager
-                .GetSection("connectionStrings") as ConnectionStringsSection;
+            this.masterConnectionString = masterConnectionString;
 
-            if (connectionStringsSection == null)
-            {
-                throw new Exception("Connection strings section not found.");
-            }
-            
-            var connectionStringSettings = connectionStringsSection.ConnectionStrings
-                .Cast<ConnectionStringSettings>()
-                .FirstOrDefault(x => x.Name == "ContactBookConnectionString");
-
-            if (connectionStringSettings == null)
-            {
-                throw new Exception("Connection string not found");
-            }
-
-            this.connectionString = connectionStringSettings.ConnectionString;                   
+            this.connectionString = connectionString;                   
         }
 
         public Contact Get(Guid id)
@@ -119,8 +104,7 @@ namespace ContactBook.Repositories.ADO
 
         public void Create()
         {
-            var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master" };
-            using (var connection = new SqlConnection(connectionStringBuilder.ToString()))
+            using (var connection = new SqlConnection(masterConnectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand(@"CREATE DATABASE ContactBook;", connection))
@@ -144,9 +128,7 @@ namespace ContactBook.Repositories.ADO
 
         public void Drop()
         {
-            var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master" };
-
-            using (var connection = new SqlConnection(connectionStringBuilder.ToString()))
+            using (var connection = new SqlConnection(masterConnectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand("DROP DATABASE ContactBook;", connection))
@@ -158,9 +140,7 @@ namespace ContactBook.Repositories.ADO
 
         public bool Exist()
         {
-            var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString) { InitialCatalog = "master" };
-
-            using (var connection = new SqlConnection(connectionStringBuilder.ToString()))
+            using (var connection = new SqlConnection(masterConnectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand("SELECT count(*) FROM master.sys.databases WHERE name = @database", connection))
