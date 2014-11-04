@@ -149,6 +149,8 @@ namespace ContactBook.Repositories.NHibernate
 
         public void Drop()
         {
+            SqlConnection.ClearAllPools();
+
             using (var sessionFactory = masterConfiguration.BuildSessionFactory())
             {
                 using (var session = sessionFactory.OpenSession())

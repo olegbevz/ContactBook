@@ -128,6 +128,8 @@ namespace ContactBook.Repositories.ADO
 
         public void Drop()
         {
+            SqlConnection.ClearAllPools();
+
             using (var connection = new SqlConnection(masterConnectionString))
             {
                 connection.Open();
