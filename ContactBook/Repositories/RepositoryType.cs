@@ -13,6 +13,7 @@ namespace ContactBook.Repositories
         LinqToXml,
         LinqToSql,
         EntityFramework,
-        NHibernate
+        NHibernate,
+        BLToolkit
     }
 }

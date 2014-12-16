@@ -1,10 +1,6 @@
 ﻿using System.Configuration;
-using System.Web.Configuration;
-using ContactBook.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
 
 namespace ContactBook.Repositories
@@ -31,6 +27,8 @@ namespace ContactBook.Repositories
                 case DataSourceType.Xml:
                     return new Xml.ContactRepository(
                         CombineFileName("contactbook-xml.xml"));
+                case DataSourceType.BLToolkit:
+                    return new BLToolkit.ContactRepository(GetConnectionString("ContactBookConnectionString"));
                 default:
                     throw new NotImplementedException();
             }

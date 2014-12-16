@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using ContactBook.Models;
 
-namespace ContactBook.Models
+namespace ContactBook.Repositories
 {
-    using System;
-
     public interface IContactRepository : IEnumerable<Contact>
     {
         /// <summary>

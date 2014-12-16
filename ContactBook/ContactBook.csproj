@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BLToolkit.4">
+      <HintPath>..\packages\BLToolkit.4.2.0\lib\net40-full\BLToolkit.4.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.dll</HintPath>
@@ -92,6 +95,8 @@
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Repositories\ADO\ContactRepository.cs" />
+    <Compile Include="Repositories\BLToolkit\Contact.cs" />
+    <Compile Include="Repositories\BLToolkit\ContactRepository.cs" />
     <Compile Include="Repositories\EntityFramework\ContactEntity.cs">
       <DependentUpon>Domain.tt</DependentUpon>
     </Compile>

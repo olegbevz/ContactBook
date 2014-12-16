@@ -14,16 +14,20 @@ namespace ContactBook.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var repository = repositoryFactory.CreateRepository(GetDataSourceType());
+            var dataSourceType = GetDataSourceType();
+
+            var repository = repositoryFactory.CreateRepository(dataSourceType);
 
             if (!repository.Exist())
             {
-                return View(new ContactsViewModel(GetDataSourceType(), false, new Contact[0]));
+                return View(new ContactsViewModel(dataSourceType, false, new Contact[0]));
             }
 
             using (var stopWatch = new StopWatchCalculator())
             {
-                return View(new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
+                var contacts = repository.ToArray();
+
+                return View(new ContactsViewModel(dataSourceType, true, contacts, stopWatch.ElapsedTime));
             }          
         }
         
