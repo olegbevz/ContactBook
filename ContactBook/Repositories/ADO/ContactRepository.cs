@@ -30,7 +30,7 @@ namespace ContactBook.Repositories.ADO
                 {
                     command.Parameters.AddWithValue("Id", id);
                     connection.Open();
-                    using (var dataReader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    using (SqlDataReader dataReader = command.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         if (dataReader.Read())
                         {
@@ -84,7 +84,7 @@ namespace ContactBook.Repositories.ADO
             }
         }
 
-        public void Save(Contact contact)
+        public void Update(Contact contact)
         {
             using (var connection = new SqlConnection(this.connectionString))
             {

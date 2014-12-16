@@ -100,7 +100,7 @@ namespace ContactBook.Controllers
             using (var stopWatch = new StopWatchCalculator())
             {
                 var repository = repositoryFactory.CreateRepository(GetDataSourceType());
-                repository.Save(contact);
+                repository.Update(contact);
                 return View("Index", new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
             }
         }

@@ -5,6 +5,7 @@ using ContactBook.Models;
 using NHibernate.Cfg;
 using System;
 using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using Environment = NHibernate.Cfg.Environment;
 
@@ -33,86 +34,90 @@ namespace ContactBook.Repositories.NHibernate
 
         public Models.Contact Get(Guid id)
         {
-            var sessionFactory = configuration.BuildSessionFactory();
-
-            using (var session = sessionFactory.OpenSession())
+            using (ISessionFactory sessionFactory = configuration.BuildSessionFactory())
             {
-                var contactEntity = session.Get<Contact>(id);
-                if (contactEntity != null)
+                using (ISession session = sessionFactory.OpenSession())
                 {
-                    return new Models.Contact
+                    Contact contactEntity = session.Get<Contact>(id);
+                    if (contactEntity != null)
                     {
-                        Id = contactEntity.Id,
-                        Name = contactEntity.Name,
-                        Address = contactEntity.Address,
-                        Phone = contactEntity.Phone
-                    };
-                }
+                        return new Models.Contact
+                        {
+                            Id = contactEntity.Id,
+                            Name = contactEntity.Name,
+                            Address = contactEntity.Address,
+                            Phone = contactEntity.Phone
+                        };
+                    }
 
-                return null;
+                    return null;
+                }
             }
         }
 
         public void Add(Models.Contact contact)
         {
-            var sessionFactory = configuration.BuildSessionFactory();
-
-            using (var session = sessionFactory.OpenSession())
+            using (ISessionFactory sessionFactory = configuration.BuildSessionFactory())
             {
-                var contactEntity = new Contact
+                using (ISession session = sessionFactory.OpenSession())
                 {
-                    Id = contact.Id,
-                    Name = contact.Name,
-                    Address = contact.Address,
-                    Phone = contact.Phone
-                };
+                    var contactEntity = new Contact
+                    {
+                        Id = contact.Id,
+                        Name = contact.Name,
+                        Address = contact.Address,
+                        Phone = contact.Phone
+                    };
 
-                session.Save(contactEntity);
-                session.Flush();
+                    session.Save(contactEntity);
+                    session.Flush();
+                }
             }
         }
 
         public void Remove(Guid id)
         {
-            var sessionFactory = configuration.BuildSessionFactory();
-
-            using (var session = sessionFactory.OpenSession())
+            using (ISessionFactory sessionFactory = configuration.BuildSessionFactory())
             {
-                var contactEntity = session.Get<Contact>(id);
-                if (contactEntity != null)
+                using (ISession session = sessionFactory.OpenSession())
                 {
-                    session.Delete(contactEntity);
+                    Contact contactEntity = session.Get<Contact>(id);
+                    if (contactEntity != null)
+                    {
+                        session.Delete(contactEntity);
+                    }
+
+                    session.Flush();
                 }
-                
-                session.Flush();
             }
         }
 
-        public void Save(Models.Contact contact)
+        public void Update(Models.Contact contact)
         {
-            var sessionFactory = configuration.BuildSessionFactory();
-
-            using (var session = sessionFactory.OpenSession())
+            using (ISessionFactory sessionFactory = configuration.BuildSessionFactory())
             {
-                var contactEntity = new Contact
+                using (ISession session = sessionFactory.OpenSession())
                 {
-                    Id = contact.Id,
-                    Name = contact.Name,
-                    Address = contact.Address,
-                    Phone = contact.Phone
-                };
+                    Contact contactEntity = new Contact
+                    {
+                        Id = contact.Id,
+                        Name = contact.Name,
+                        Address = contact.Address,
+                        Phone = contact.Phone
+                    };
 
-                var mergedContactEntity = session.Merge(contactEntity);
-                session.Update(mergedContactEntity);
-                session.Flush();
+                    var mergedContactEntity = session.Merge(contactEntity);
+                    session.Update(mergedContactEntity);
+                    session.Flush();
+                }
             }
         }
 
         public IEnumerator<Models.Contact> GetEnumerator()
         {
-            using (var sessionFactory = configuration.BuildSessionFactory())
+            using (ISessionFactory sessionFactory = configuration.BuildSessionFactory())
             {
-                using (var session = sessionFactory.OpenSession())
+                using (ISession session = sessionFactory.OpenSession())
                 {
                     var contacts = session.QueryOver<Contact>().List().Select(contactEntity => new Models.Contact
                     {
@@ -134,9 +139,9 @@ namespace ContactBook.Repositories.NHibernate
 
         public void Create()
         {
-            using (var sessionFactory = masterConfiguration.BuildSessionFactory())
+            using (ISessionFactory sessionFactory = masterConfiguration.BuildSessionFactory())
             {
-                using (var session = sessionFactory.OpenSession())
+                using (ISession session = sessionFactory.OpenSession())
                 {
                     var query = session.CreateSQLQuery("CREATE DATABASE ContactBook;");
                     var result = query.ExecuteUpdate();
@@ -151,9 +156,9 @@ namespace ContactBook.Repositories.NHibernate
         {
             SqlConnection.ClearAllPools();
 
-            using (var sessionFactory = masterConfiguration.BuildSessionFactory())
+            using (ISessionFactory sessionFactory = masterConfiguration.BuildSessionFactory())
             {
-                using (var session = sessionFactory.OpenSession())
+                using (ISession session = sessionFactory.OpenSession())
                 {
                     var query = session.CreateSQLQuery("DROP DATABASE ContactBook;");
                     var result = query.ExecuteUpdate();

@@ -39,7 +39,7 @@ namespace ContactBook.Models
         /// <param name="contact">
         /// Сохраняемая модель
         /// </param>
-        void Save(Contact contact);
+        void Update(Contact contact);
 
         /// <summary>
         /// Проверка наличия базы данных

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using ContactBook.Models;
 
 namespace ContactBook.Repositories.LinqToSql
@@ -12,9 +14,14 @@ namespace ContactBook.Repositories.LinqToSql
         {
             using (var context = new DataClassesDataContext())
             {
-                var contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(id));
+                var stringBuilder = new StringBuilder();
+                context.Log = new StringWriter(stringBuilder);
+
+                Contact contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(id));
                 if (contactEntity != null)
                 {
+                    var sqlQuery = stringBuilder.ToString();
+
                     return new Models.Contact
                     {
                         Id = contactEntity.Id,
@@ -32,7 +39,7 @@ namespace ContactBook.Repositories.LinqToSql
         {
             using (var context = new DataClassesDataContext())
             {
-                var contactEntity = new Contact();
+                Contact contactEntity = new Contact();
                 contactEntity.Id = Guid.NewGuid();
                 contactEntity.Name = contact.Name;
                 contactEntity.Phone = contact.Phone;
@@ -47,7 +54,7 @@ namespace ContactBook.Repositories.LinqToSql
         {
             using (var context = new DataClassesDataContext())
             {
-                var contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(id));
+                Contact contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(id));
                 if (contactEntity != null)
                 {
                     context.Contacts.DeleteOnSubmit(contactEntity);
@@ -56,11 +63,11 @@ namespace ContactBook.Repositories.LinqToSql
             }
         }
 
-        public void Save(Models.Contact contact)
+        public void Update(Models.Contact contact)
         {
             using (var context = new DataClassesDataContext())
             {
-                var contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(contact.Id));
+                Contact contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(contact.Id));
                 contactEntity.Name = contact.Name;
                 contactEntity.Phone = contact.Phone;
                 contactEntity.Address = contact.Address;

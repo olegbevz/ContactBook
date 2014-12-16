@@ -1,8 +1,13 @@
-﻿namespace ContactBook.Repositories.EntityFramework
+﻿
+
+using System.Text;
+
+namespace ContactBook.Repositories.EntityFramework
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Models;
 
     public class ContactRepository : IContactRepository
@@ -11,9 +16,14 @@
         {
             using (var context = new DomainContainer())
             {
+                var stringBuilder = new StringBuilder();
+                context.Database.Log = generatedSql => stringBuilder.AppendLine(generatedSql);
+
                 var contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(id));
                 if (contactEntity != null)
                 {
+                    var sqlCode = stringBuilder.ToString();
+
                     return new Contact
                     {
                         Id = contactEntity.Id,
@@ -57,7 +67,7 @@
             }
         }
 
-        public void Save(Contact contact)
+        public void Update(Contact contact)
         {
             using (var context = new DomainContainer())
             {

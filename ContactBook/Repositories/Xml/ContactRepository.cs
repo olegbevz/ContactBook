@@ -103,7 +103,7 @@
         /// <param name="contact">
         /// Сохраняемая модель
         /// </param>
-        public void Save(Contact contact)
+        public void Update(Contact contact)
         {
             var contacts = this.GetAll();
 

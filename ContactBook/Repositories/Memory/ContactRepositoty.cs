@@ -92,7 +92,7 @@
         /// <param name="contact">
         /// Сохраняемая модель
         /// </param>
-        public void Save(Contact contact)
+        public void Update(Contact contact)
         {
             var existingContact = this.Get(contact.Id);
 

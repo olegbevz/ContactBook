@@ -118,7 +118,7 @@ namespace ContactBook.Repositories.LinqToXml
             }  
         }
 
-        public void Save(Contact contact)
+        public void Update(Contact contact)
         {
             if (!File.Exists(this.fileName))
             {
