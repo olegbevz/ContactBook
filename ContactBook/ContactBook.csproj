@@ -88,7 +88,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ContactController.cs" />
-    <Compile Include="Controllers\StopWatchCalculator.cs" />
+    <Compile Include="Models\PerformanceResultViewModel.cs" />
+    <Compile Include="Performance\StopWatchCalculator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -127,6 +128,8 @@
     <Compile Include="Repositories\Memory\ContactRepositoty.cs" />
     <Compile Include="Repositories\NHibernate\Contact.cs" />
     <Compile Include="Repositories\NHibernate\ContactRepository.cs" />
+    <Compile Include="Performance\PerformanceCalculator.cs" />
+    <Compile Include="Performance\PerformanceResult.cs" />
     <Compile Include="Repositories\RepositoryFactory.cs" />
     <Compile Include="Repositories\RepositoryType.cs" />
     <Compile Include="Repositories\Xml\ContactRepository.cs" />
@@ -196,6 +199,7 @@
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Views\Contact\ContactPartial.cshtml" />
     <Content Include="Views\Contact\CreateRepository.cshtml" />
+    <Content Include="Views\Contact\PerformanceTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -39,6 +39,9 @@ namespace ContactBook.Repositories.LinqToSql
         {
             using (var context = new DataClassesDataContext())
             {
+                var stringBuilder = new StringBuilder();
+                context.Log = new StringWriter(stringBuilder);
+
                 Contact contactEntity = new Contact();
                 contactEntity.Id = Guid.NewGuid();
                 contactEntity.Name = contact.Name;
@@ -47,6 +50,8 @@ namespace ContactBook.Repositories.LinqToSql
 
                 context.Contacts.InsertOnSubmit(contactEntity);
                 context.SubmitChanges();
+
+                var sqlQuery = stringBuilder.ToString();
             }
         }
 
@@ -71,6 +76,7 @@ namespace ContactBook.Repositories.LinqToSql
                 contactEntity.Name = contact.Name;
                 contactEntity.Phone = contact.Phone;
                 contactEntity.Address = contact.Address;
+
                 context.SubmitChanges();
             }
         }

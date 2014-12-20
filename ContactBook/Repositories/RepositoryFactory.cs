@@ -7,27 +7,27 @@ namespace ContactBook.Repositories
 {
     public class RepositoryFactory
     {
-        public IContactRepository CreateRepository(DataSourceType dataSourceType)
+        public IContactRepository CreateRepository(RepositoryType dataSourceType)
         {
             switch (dataSourceType)
             {
-                case DataSourceType.ADO:
+                case RepositoryType.ADO:
                     return new ADO.ContactRepository(GetConnectionString("ContactBookConnectionString"), GetConnectionString("MasterConnectionString"));
-                case DataSourceType.EntityFramework:
+                case RepositoryType.EntityFramework:
                     return new EntityFramework.ContactRepository();
-                case DataSourceType.LinqToSql:
+                case RepositoryType.LinqToSql:
                     return new LinqToSql.ContactRepository();
-                case DataSourceType.LinqToXml:
+                case RepositoryType.LinqToXml:
                     return new LinqToXml.ContactRepository(
                         CombineFileName("contactbook-linqtoxml.xml"));
-                case DataSourceType.Memory:
+                case RepositoryType.Memory:
                     return Memory.ContactRepository.Instance;
-                case DataSourceType.NHibernate:
+                case RepositoryType.NHibernate:
                     return new NHibernate.ContactRepository(GetConnectionString("ContactBookConnectionString"), GetConnectionString("MasterConnectionString"));
-                case DataSourceType.Xml:
+                case RepositoryType.Xml:
                     return new Xml.ContactRepository(
                         CombineFileName("contactbook-xml.xml"));
-                case DataSourceType.BLToolkit:
+                case RepositoryType.BLToolkit:
                     return new BLToolkit.ContactRepository(GetConnectionString("ContactBookConnectionString"));
                 default:
                     throw new NotImplementedException();

@@ -1,0 +1,32 @@
+﻿@model ContactBook.Models.PerformanceResultViewModel
+
+@{
+    ViewBag.Title = "Тест производительности";
+    Layout = "_Layout.cshtml";
+}
+
+<div>
+    <table class="table table-bordered">
+        <tr>
+            <th>Провайдер данных</th>
+            <th>Добавление @Model.RecordsCount записей</th>
+            <th>Получение @Model.RecordsCount записей</th>
+            <th>Обновление @Model.RecordsCount записей</th>
+            <th>Удаление @Model.RecordsCount записей</th>
+        </tr>
+        <tbody>
+            @foreach (var performanceResult in Model.RepositoriesResults)
+            {
+                <tr>
+                    <td>@performanceResult.RepositoryType</td>
+                    <td>@performanceResult.InsertRecordsDuration.TotalMilliseconds мc.</td>
+                    <td>@performanceResult.SelectRecordsDuration.TotalMilliseconds мc.</td>
+                    <td>@performanceResult.UpdateRecordsDuration.TotalMilliseconds мc.</td>
+                    <td>@performanceResult.DeleteRecordsDuration.TotalMilliseconds мc.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

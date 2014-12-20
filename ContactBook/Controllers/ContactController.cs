@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using ContactBook.Performance;
 
 namespace ContactBook.Controllers
 {
@@ -32,7 +33,7 @@ namespace ContactBook.Controllers
         }
         
         [HttpPost]
-        public ActionResult CreateRepository(DataSourceType dataSourceType = DataSourceType.Memory)
+        public ActionResult CreateRepository(RepositoryType dataSourceType = RepositoryType.Memory)
         {
             using (var stopWatch = new StopWatchCalculator())
             {
@@ -54,7 +55,7 @@ namespace ContactBook.Controllers
         }
 
         [HttpGet]
-        public ActionResult ChangeDataSource(DataSourceType dataSourceType)
+        public ActionResult ChangeDataSource(RepositoryType dataSourceType)
         {
             SetDataSourceType(dataSourceType);
             
@@ -109,7 +110,27 @@ namespace ContactBook.Controllers
             }
         }
 
-        private void SetDataSourceType(DataSourceType dataSourceType)
+        [HttpGet]
+        public ActionResult PerformanceTest()
+        {
+            var reposaitoryTypes = Enum.GetValues(typeof (RepositoryType)).Cast<RepositoryType>().ToArray();
+
+            var performanceCalculator = new PerformanceCalculator();
+
+            var recordsCount = 1000;
+
+            var performanceResult = performanceCalculator.CalculatePerformance(recordsCount, reposaitoryTypes);
+
+            var performanceResultViewModel = new PerformanceResultViewModel
+            {
+                RecordsCount = recordsCount,
+                RepositoriesResults = performanceResult
+            };
+
+            return View(performanceResultViewModel);
+        }
+
+        private void SetDataSourceType(RepositoryType dataSourceType)
         {
             if (HttpContext != null && HttpContext.Session != null)
             {
@@ -117,20 +138,20 @@ namespace ContactBook.Controllers
             }
         }
 
-        private DataSourceType GetDataSourceType()
+        private RepositoryType GetDataSourceType()
         {
             if (HttpContext == null || HttpContext.Session == null)
             {
-                return DataSourceType.Memory;
+                return RepositoryType.Memory;
             }
 
             var obj = HttpContext.Session["DataSourceType"];
             if (obj == null)
             {
-                return DataSourceType.Memory;;
+                return RepositoryType.Memory;;
             }
 
-            return (DataSourceType)obj;
+            return (RepositoryType)obj;
         }
     }
 }

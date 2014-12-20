@@ -14,16 +14,16 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown">Выберите способ хранения данных (@Model.DataSourceType.ToString())<b class="caret"></b></a>
                 <ul id="menu1" class="dropdown-menu">
-                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = DataSourceType.Memory })">Memory</a></li>
+                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = RepositoryType.Memory })">Memory</a></li>
                     <li class="divider"></li>
-                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = DataSourceType.Xml })">XML</a></li>
-                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = DataSourceType.LinqToXml })">Linq to XML</a></li>
+                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = RepositoryType.Xml })">XML</a></li>
+                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = RepositoryType.LinqToXml })">Linq to XML</a></li>
                     <li class="divider"></li>
-                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = DataSourceType.ADO })">ADO.NET</a></li>
-                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = DataSourceType.LinqToSql })">Linq to SQL Classes</a></li>
-                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = DataSourceType.EntityFramework })">Entity Framework</a></li>
-                    <li><a href="@Url.Action("ChangeDataSource", new {dataSourceType = DataSourceType.NHibernate})">NHibernate</a></li>
-                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = DataSourceType.BLToolkit })">BLToolkit</a></li>
+                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = RepositoryType.ADO })">ADO.NET</a></li>
+                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = RepositoryType.LinqToSql })">Linq to SQL Classes</a></li>
+                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = RepositoryType.EntityFramework })">Entity Framework</a></li>
+                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = RepositoryType.NHibernate })">NHibernate</a></li>
+                    <li><a href="@Url.Action("ChangeDataSource", new { dataSourceType = RepositoryType.BLToolkit })">BLToolkit</a></li>
                 </ul>
             </li>
         </ul>
@@ -59,7 +59,7 @@
         <button class="btn btn-info" onclick="onCreateContactButtonClick('@Url.Action("CreateContact")')">
             <i class="icon-white icon-plus"></i> Добавить контакт
         </button>
-        <button class="btn btn-info" onclick="onDropRepositoryButtonClick()">
+        <button class="btn btn-info" onclick=" onDropRepositoryButtonClick() ">
             <i class="icon-trash"></i> Удалить данные
         </button>
     }
@@ -69,6 +69,9 @@
             Создать хранилище данных
         </button>
     }
+    <a href="@Url.Action("PerformanceTest")" target="_blank" class="btn btn-info">
+        <i class="icon-time"></i> Тест производительности
+    </a>
     <div class="navbar-fixed-bottom row-fluid navbar-inverse">
         <div class="navbar-inner">
             <div class="container">

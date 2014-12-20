@@ -19,10 +19,16 @@ namespace ContactBook.Repositories.EntityFramework
                 var stringBuilder = new StringBuilder();
                 context.Database.Log = generatedSql => stringBuilder.AppendLine(generatedSql);
 
-                var contactEntity = context.Contacts.FirstOrDefault(x => x.Id.Equals(id));
+                var contactEntity = context.Contacts
+                    .Where(x => x.Name.StartsWith("Jonh"))
+                    .OrderBy(x => x.Name)
+                    .ThenByDescending(x => x.Address).FirstOrDefault();
+
+                var sqlCode = stringBuilder.ToString();
+
                 if (contactEntity != null)
                 {
-                    var sqlCode = stringBuilder.ToString();
+                    sqlCode = stringBuilder.ToString();
 
                     return new Contact
                     {
