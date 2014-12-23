@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using BLToolkit.Data;
-using BLToolkit.Data.DataProvider;
-using BLToolkit.Data.Linq;
-
-namespace ContactBook.Repositories.BLToolkit
+﻿namespace ContactBook.Repositories.BLToolkit
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using global::BLToolkit.Data;
+    using global::BLToolkit.Data.Linq;
+
     public class ContactRepository : IContactRepository
     {
-        private readonly string connectionString;
+        private readonly DbManager db;
 
-        public ContactRepository(string connectionString)
+        public ContactRepository(DbManager db)
         {
-            this.connectionString = connectionString;
+            this.db = db;
         }
 
         public Models.Contact Get(Guid id)
         {
-            using (var db = new DbManager(new Sql2012DataProvider(), connectionString))
-            {
                 var contactEntity = db.GetTable<Contact>().FirstOrDefault(x => x.Id == id);
                 if (contactEntity != null)
                 {
@@ -34,15 +32,12 @@ namespace ContactBook.Repositories.BLToolkit
                 }
 
                 return null;
-            }
         }
 
         public void Add(Models.Contact contact)
         {
             contact.Id = Guid.NewGuid();
 
-            using (var db = new DbManager(new Sql2012DataProvider(), connectionString))
-            {
                 db.GetTable<Contact>().InsertWithIdentity(() => new Contact
                 {
                     Id = contact.Id,
@@ -50,21 +45,15 @@ namespace ContactBook.Repositories.BLToolkit
                     Address = contact.Address,
                     Phone = contact.Phone
                 });
-            }
         }
 
         public void Remove(Guid id)
         {
-            using (var db = new DbManager(new Sql2012DataProvider(), connectionString))
-            {
                 db.GetTable<Contact>().Delete(contact => contact.Id == id);
-            }
         }
 
         public void Update(Models.Contact contact)
         {
-            using (var db = new DbManager(new Sql2012DataProvider(), connectionString))
-            {
                 db.GetTable<Contact>().Update(
                     contactEntity => contactEntity.Id == contact.Id,
                     contactEntity => new Contact
@@ -74,7 +63,6 @@ namespace ContactBook.Repositories.BLToolkit
                         Address = contact.Address,
                         Phone = contact.Phone
                     });
-            }
         }
 
         public bool Exist()
@@ -94,8 +82,6 @@ namespace ContactBook.Repositories.BLToolkit
 
         public IEnumerator<Models.Contact> GetEnumerator()
         {
-            using (var db = new DbManager(new Sql2012DataProvider(), connectionString))
-            {
                 return db.GetTable<Contact>().Select(contact => new Models.Contact
                 {
                     Id = contact.Id,
@@ -103,7 +89,6 @@ namespace ContactBook.Repositories.BLToolkit
                     Address = contact.Address,
                     Phone = contact.Phone
                 }).AsEnumerable().GetEnumerator();
-            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

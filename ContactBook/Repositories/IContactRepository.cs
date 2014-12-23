@@ -40,21 +40,5 @@ namespace ContactBook.Repositories
         /// Сохраняемая модель
         /// </param>
         void Update(Contact contact);
-
-        /// <summary>
-        /// Проверка наличия базы данных
-        /// </summary>
-        /// <returns></returns>
-        bool Exist();
-
-        /// <summary>
-        /// Создание базы данных
-        /// </summary>
-        void Create();
-
-        /// <summary>
-        /// Удалить базу данных
-        /// </summary>
-        void Drop();
     }
 }

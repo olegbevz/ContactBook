@@ -5,12 +5,12 @@ namespace ContactBook.Models
 {
     public class ContactsViewModel
     {
-        public ContactsViewModel(RepositoryType dataSourceType, bool dataSourceExists, Contact[] contacts)
+        public ContactsViewModel(DatabaseType dataSourceType, bool dataSourceExists, Contact[] contacts)
             : this(dataSourceType, dataSourceExists, contacts, TimeSpan.Zero)
         {
         }
 
-        public ContactsViewModel(RepositoryType dataSourceType, bool dataSourceExists, Contact[] contacts, TimeSpan requestTime)
+        public ContactsViewModel(DatabaseType dataSourceType, bool dataSourceExists, Contact[] contacts, TimeSpan requestTime)
         {
             DataSourceType = dataSourceType;
             DataSourceExists = dataSourceExists;
@@ -18,7 +18,7 @@ namespace ContactBook.Models
             RequestTime = requestTime;
         }
 
-        public RepositoryType DataSourceType { get; private set; }
+        public DatabaseType DataSourceType { get; private set; }
 
         public bool DataSourceExists { get; private set; }
 

@@ -10,35 +10,37 @@ namespace ContactBook.Controllers
 
     public class ContactController : Controller
     {
-        private static readonly RepositoryFactory repositoryFactory = new RepositoryFactory();
+        private static readonly DatabaseFactory repositoryFactory = new DatabaseFactory();
 
         [HttpGet]
         public ActionResult Index()
         {
             var dataSourceType = GetDataSourceType();
 
-            var repository = repositoryFactory.CreateRepository(dataSourceType);
+            var database = repositoryFactory.GetDatabase(dataSourceType);
 
-            if (!repository.Exist())
+            if (!database.Exist())
             {
                 return View(new ContactsViewModel(dataSourceType, false, new Contact[0]));
             }
-
+            
             using (var stopWatch = new StopWatchCalculator())
             {
-                var contacts = repository.ToArray();
-
-                return View(new ContactsViewModel(dataSourceType, true, contacts, stopWatch.ElapsedTime));
-            }          
+                using (var session = database.OpenSession())
+                {
+                    var contacts = session.ContactRepository.ToArray();
+                    return View(new ContactsViewModel(dataSourceType, true, contacts, stopWatch.ElapsedTime));
+                }
+            }
         }
         
         [HttpPost]
-        public ActionResult CreateRepository(RepositoryType dataSourceType = RepositoryType.Memory)
+        public ActionResult CreateRepository(DatabaseType dataSourceType = DatabaseType.Memory)
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                var repository = repositoryFactory.CreateRepository(dataSourceType);
-                repository.Create();
+                var database = repositoryFactory.GetDatabase(dataSourceType);
+                database.Create();
                 return View("Index", new ContactsViewModel(dataSourceType, true, new Contact[0], stopWatch.ElapsedTime));
             }
         }
@@ -48,14 +50,14 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                var repository = repositoryFactory.CreateRepository(GetDataSourceType());
-                repository.Drop();
+                var database = repositoryFactory.GetDatabase(GetDataSourceType());
+                database.Drop();
                 return View("Index", new ContactsViewModel(GetDataSourceType(), false, new Contact[0], stopWatch.ElapsedTime));
             }
         }
 
         [HttpGet]
-        public ActionResult ChangeDataSource(RepositoryType dataSourceType)
+        public ActionResult ChangeDataSource(DatabaseType dataSourceType)
         {
             SetDataSourceType(dataSourceType);
             
@@ -73,9 +75,13 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                var repository = repositoryFactory.CreateRepository(GetDataSourceType());
-                repository.Add(contact);
-                return View("Index", new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
+                var database = repositoryFactory.GetDatabase(GetDataSourceType());
+                using (var session = database.OpenSession())
+                {
+                    session.ContactRepository.Add(contact);
+                    session.Commit();
+                    return View("Index", new ContactsViewModel(GetDataSourceType(), true, session.ContactRepository.ToArray(), stopWatch.ElapsedTime));
+                }
             }   
         }
 
@@ -84,19 +90,25 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                var repository = repositoryFactory.CreateRepository(GetDataSourceType());
-                repository.Remove(id);
-                return View("Index", new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
+                var database = repositoryFactory.GetDatabase(GetDataSourceType());
+                using (var session = database.OpenSession())
+                {
+                    session.ContactRepository.Remove(id);
+                    session.Commit();
+                    return View("Index", new ContactsViewModel(GetDataSourceType(), true, session.ContactRepository.ToArray(), stopWatch.ElapsedTime));
+                }
             }            
         }
 
         [HttpGet]
         public ActionResult EditContact(Guid id)
         {
-            var repository = repositoryFactory.CreateRepository(GetDataSourceType());
-            var contact = repository.Get(id);
-
-            return this.View(contact);
+            var database = repositoryFactory.GetDatabase(GetDataSourceType());
+            using (var session = database.OpenSession())
+            {
+                var contact = session.ContactRepository.Get(id);
+                return this.View(contact);
+            }
         }
 
         [HttpPost]
@@ -104,22 +116,35 @@ namespace ContactBook.Controllers
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                var repository = repositoryFactory.CreateRepository(GetDataSourceType());
-                repository.Update(contact);
-                return View("Index", new ContactsViewModel(GetDataSourceType(), true, repository.ToArray(), stopWatch.ElapsedTime));
+                var database = repositoryFactory.GetDatabase(GetDataSourceType());
+                using (var session = database.OpenSession())
+                {
+                    session.ContactRepository.Update(contact);
+                    session.Commit();
+                    return View("Index", new ContactsViewModel(GetDataSourceType(), true, session.ContactRepository.ToArray(), stopWatch.ElapsedTime));
+                }
             }
         }
 
         [HttpGet]
         public ActionResult PerformanceTest()
         {
-            var reposaitoryTypes = Enum.GetValues(typeof (RepositoryType)).Cast<RepositoryType>().ToArray();
-
             var performanceCalculator = new PerformanceCalculator();
 
             var recordsCount = 1000;
+            var databaseTypes = new[]
+                                    {
+                                        DatabaseType.Memory,
+                                        DatabaseType.Xml,
+                                        DatabaseType.LinqToXml,
+                                        DatabaseType.ADO, 
+                                        DatabaseType.LinqToSql, 
+                                        DatabaseType.EntityFramework,
+                                        DatabaseType.BLToolkit, 
+                                        DatabaseType.NHibernate
+                                    };
 
-            var performanceResult = performanceCalculator.CalculatePerformance(recordsCount, reposaitoryTypes);
+            var performanceResult = performanceCalculator.CalculatePerformance(recordsCount, databaseTypes);
 
             var performanceResultViewModel = new PerformanceResultViewModel
             {
@@ -130,7 +155,7 @@ namespace ContactBook.Controllers
             return View(performanceResultViewModel);
         }
 
-        private void SetDataSourceType(RepositoryType dataSourceType)
+        private void SetDataSourceType(DatabaseType dataSourceType)
         {
             if (HttpContext != null && HttpContext.Session != null)
             {
@@ -138,20 +163,20 @@ namespace ContactBook.Controllers
             }
         }
 
-        private RepositoryType GetDataSourceType()
+        private DatabaseType GetDataSourceType()
         {
             if (HttpContext == null || HttpContext.Session == null)
             {
-                return RepositoryType.Memory;
+                return DatabaseType.Memory;
             }
 
             var obj = HttpContext.Session["DataSourceType"];
             if (obj == null)
             {
-                return RepositoryType.Memory;;
+                return DatabaseType.Memory;;
             }
 
-            return (RepositoryType)obj;
+            return (DatabaseType)obj;
         }
     }
 }

@@ -6,11 +6,13 @@ using ContactBook.Repositories;
 
 namespace ContactBook.Performance
 {
+    using System.Diagnostics;
+
     public class PerformanceCalculator
     {
-        private readonly RepositoryFactory repositoryFactory = new RepositoryFactory();
+        private readonly DatabaseFactory repositoryFactory = new DatabaseFactory();
 
-        public IEnumerable<PerformanceResult> CalculatePerformance(int recordsCount, RepositoryType[] reporositoryTypes)
+        public IEnumerable<PerformanceResult> CalculatePerformance(int recordsCount, DatabaseType[] reporositoryTypes)
         {
             var performanceResults = new List<PerformanceResult>();
 
@@ -24,53 +26,80 @@ namespace ContactBook.Performance
             return performanceResults;
         }
 
-        public PerformanceResult CalculatePerformance(int recordsCount, RepositoryType repositoryType)
+        public PerformanceResult CalculatePerformance(int recordsCount, DatabaseType repositoryType)
         {
             var performanceResult = new PerformanceResult { RepositoryType = repositoryType };
 
-            var repository = repositoryFactory.CreateRepository(repositoryType);
-            if (!repository.Exist())
-                repository.Create();
+            var database = repositoryFactory.GetDatabase(repositoryType);
+            if (!database.Exist())
+                database.Create();
 
             var contacts = Enumerable.Range(0, recordsCount)
                 .Select(index => new Contact { Name = "John", Address = "Moscow", Phone = "89234564532" })
                 .ToArray();
 
-            performanceResult.InsertRecordsDuration = InsertRecords(repository, contacts);
+            TimeSpan duration;
+            long memoryUsage;
 
-            performanceResult.SelectRecordsDuration = SelectRecords(repository, out contacts);
+            InsertRecords(database, contacts, out duration, out memoryUsage);
+            performanceResult.InsertRecordsDuration = duration;
+            performanceResult.InsertRecordsMemoryUsage = (double)memoryUsage / 1024;
 
-            performanceResult.UpdateRecordsDuration = UpdateRecords(repository, contacts);
+            SelectRecords(database, out contacts, out duration, out memoryUsage);
+            performanceResult.SelectRecordsDuration = duration;
+            performanceResult.SelectRecordsMemoryUsage = (double)memoryUsage / 1024;
 
-            performanceResult.DeleteRecordsDuration = DeleteRecords(repository, contacts);
+            UpdateRecords(database, contacts, out duration, out memoryUsage);
+            performanceResult.UpdateRecordsDuration = duration;
+            performanceResult.UpdateRecordsMemoryUsage = (double)memoryUsage / 1024;
+
+            DeleteRecords(database, contacts, out duration, out memoryUsage);
+            performanceResult.DeleteRecordsDuration = duration;
+            performanceResult.DeleteRecordsMemoryUsage = (double)memoryUsage / 1024;
 
             return performanceResult;
         }
 
-        private TimeSpan InsertRecords(IContactRepository repository, Contact[] contacts)
+        private void InsertRecords(IDatabase database, Contact[] contacts, out TimeSpan duration, out long memoryUsage)
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                for (int i = 0; i < contacts.Length; i++)
+                using (var session = database.OpenSession())
                 {
-                    repository.Add(contacts[i]);
+                    memoryUsage = this.GetCurrentMemoryUsage();
+
+                    for (int i = 0; i < contacts.Length; i++)
+                    {
+                        session.ContactRepository.Add(contacts[i]);
+                    }
+
+                    memoryUsage = this.GetCurrentMemoryUsage() - memoryUsage;
+
+                    session.Commit();
                 }
 
-                return stopWatch.ElapsedTime;
+                duration = stopWatch.ElapsedTime;
             }
         }
 
-        private TimeSpan SelectRecords(IContactRepository repository, out Contact[] contacts)
+        private void SelectRecords(IDatabase database, out Contact[] contacts, out TimeSpan duration, out long memoryUsage)
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                contacts = repository.ToArray();
+                using (var session = database.OpenSession())
+                {
+                    memoryUsage = this.GetCurrentMemoryUsage();
 
-                return stopWatch.ElapsedTime;
+                    contacts = session.ContactRepository.ToArray();
+
+                    memoryUsage = this.GetCurrentMemoryUsage() - memoryUsage;
+                }
+
+                duration = stopWatch.ElapsedTime;
             }
         }
 
-        private TimeSpan UpdateRecords(IContactRepository repository, Contact[] contacts)
+        private void UpdateRecords(IDatabase database, Contact[] contacts, out TimeSpan duration, out long memoryUsage)
         {
             foreach (var contact in contacts)
             {
@@ -81,26 +110,51 @@ namespace ContactBook.Performance
 
             using (var stopWatch = new StopWatchCalculator())
             {
-                for (int i = 0; i < contacts.Length; i++)
+                using (var session = database.OpenSession())
                 {
-                    repository.Update(contacts[i]);
+                    memoryUsage = this.GetCurrentMemoryUsage();
+
+                    for (int i = 0; i < contacts.Length; i++)
+                    {
+                        session.ContactRepository.Update(contacts[i]);
+                    }
+
+                    memoryUsage = this.GetCurrentMemoryUsage() - memoryUsage;
+
+                    session.Commit();
                 }
 
-                return stopWatch.ElapsedTime;
+                duration = stopWatch.ElapsedTime;
             }
         }
 
-        private TimeSpan DeleteRecords(IContactRepository repository, Contact[] contacts)
+        private void DeleteRecords(IDatabase database, Contact[] contacts, out TimeSpan duration, out long memoryUsage)
         {
             using (var stopWatch = new StopWatchCalculator())
             {
-                for (int i = 0; i < contacts.Length; i++)
+                using (var session = database.OpenSession())
                 {
-                    repository.Remove(contacts[i].Id);
+                    memoryUsage = this.GetCurrentMemoryUsage();
+
+                    for (int i = 0; i < contacts.Length; i++)
+                    {
+                        session.ContactRepository.Remove(contacts[i].Id);
+                    }
+
+                    memoryUsage = this.GetCurrentMemoryUsage() - memoryUsage;
+
+                    session.Commit();
                 }
 
-                return stopWatch.ElapsedTime;
+                duration = stopWatch.ElapsedTime;
             }
+        }
+
+        private long GetCurrentMemoryUsage()
+        {
+            var process = Process.GetCurrentProcess();
+
+            return process.PrivateMemorySize64;
         }
     }
 }

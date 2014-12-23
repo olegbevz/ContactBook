@@ -96,12 +96,17 @@
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Repositories\ADO\ContactRepository.cs" />
+    <Compile Include="Repositories\ADO\Database.cs" />
+    <Compile Include="Repositories\ADO\UnitOfWork.cs" />
     <Compile Include="Repositories\BLToolkit\Contact.cs" />
     <Compile Include="Repositories\BLToolkit\ContactRepository.cs" />
+    <Compile Include="Repositories\BLToolkit\Database.cs" />
+    <Compile Include="Repositories\BLToolkit\UnitOfWork.cs" />
     <Compile Include="Repositories\EntityFramework\ContactEntity.cs">
       <DependentUpon>Domain.tt</DependentUpon>
     </Compile>
     <Compile Include="Repositories\EntityFramework\ContactRepository.cs" />
+    <Compile Include="Repositories\EntityFramework\Database.cs" />
     <Compile Include="Repositories\EntityFramework\Domain.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -117,23 +122,36 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Domain.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\EntityFramework\UnitOfWork.cs" />
     <Compile Include="Repositories\IContactRepository.cs" />
+    <Compile Include="Repositories\IDatabase.cs" />
+    <Compile Include="Repositories\ISession.cs" />
     <Compile Include="Repositories\LinqToSql\ContactRepository.cs" />
+    <Compile Include="Repositories\LinqToSql\Database.cs" />
     <Compile Include="Repositories\LinqToSql\DataClasses.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\LinqToSql\UnitOfWork.cs" />
     <Compile Include="Repositories\LinqToXml\ContactRepository.cs" />
+    <Compile Include="Repositories\LinqToXml\Database.cs" />
+    <Compile Include="Repositories\LinqToXml\Session.cs" />
     <Compile Include="Repositories\Memory\ContactRepositoty.cs" />
+    <Compile Include="Repositories\Memory\Database.cs" />
+    <Compile Include="Repositories\Memory\Session.cs" />
     <Compile Include="Repositories\NHibernate\Contact.cs" />
     <Compile Include="Repositories\NHibernate\ContactRepository.cs" />
     <Compile Include="Performance\PerformanceCalculator.cs" />
     <Compile Include="Performance\PerformanceResult.cs" />
-    <Compile Include="Repositories\RepositoryFactory.cs" />
-    <Compile Include="Repositories\RepositoryType.cs" />
+    <Compile Include="Repositories\DatabaseFactory.cs" />
+    <Compile Include="Repositories\DatabaseType.cs" />
+    <Compile Include="Repositories\NHibernate\Database.cs" />
+    <Compile Include="Repositories\NHibernate\UnitOfWork.cs" />
     <Compile Include="Repositories\Xml\ContactRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Xml\Database.cs" />
+    <Compile Include="Repositories\Xml\Session.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />

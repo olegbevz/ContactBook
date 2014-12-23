@@ -19,10 +19,10 @@
             {
                 <tr>
                     <td>@performanceResult.RepositoryType</td>
-                    <td>@performanceResult.InsertRecordsDuration.TotalMilliseconds мc.</td>
-                    <td>@performanceResult.SelectRecordsDuration.TotalMilliseconds мc.</td>
-                    <td>@performanceResult.UpdateRecordsDuration.TotalMilliseconds мc.</td>
-                    <td>@performanceResult.DeleteRecordsDuration.TotalMilliseconds мc.</td>
+                    <td>@performanceResult.InsertRecordsDuration.TotalMilliseconds мc. / @performanceResult.InsertRecordsMemoryUsage Кб.</td>
+                    <td>@performanceResult.SelectRecordsDuration.TotalMilliseconds мc. / @performanceResult.SelectRecordsMemoryUsage Кб.</td>
+                    <td>@performanceResult.UpdateRecordsDuration.TotalMilliseconds мc. / @performanceResult.UpdateRecordsMemoryUsage Кб.</td>
+                    <td>@performanceResult.DeleteRecordsDuration.TotalMilliseconds мc. / @performanceResult.DeleteRecordsMemoryUsage Кб.</td>
                 </tr>
             }
         </tbody>

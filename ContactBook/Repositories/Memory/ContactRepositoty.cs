@@ -1,5 +1,8 @@
 ﻿namespace ContactBook.Repositories.Memory
 {
+    using global::BLToolkit.Data;
+    using global::BLToolkit.Data.DataProvider;
+
     using Models;
     using System;
     using System.Collections;
@@ -8,20 +11,11 @@
 
     public class ContactRepository : IContactRepository
     {
-        private IList<Contact> contacts;
+        private readonly IList<Contact> contacts;
 
-        private static ContactRepository instance = new ContactRepository();
-
-        /// <summary>
-        /// Gets the instance.
-        /// Статический экземпляр сущности
-        /// </summary>
-        public static ContactRepository Instance 
+        public ContactRepository(IList<Contact> contacts)
         {
-            get
-            {
-                return instance;
-            }
+            this.contacts = contacts;
         }
 
         /// <summary>
@@ -99,21 +93,6 @@
             existingContact.Name = contact.Name;
             existingContact.Address = contact.Address;
             existingContact.Phone = contact.Phone;
-        }
-
-        public void Create()
-        {
-            contacts = new List<Contact>();
-        }
-
-        public void Drop()
-        {
-            contacts = null;
-        }
-
-        public bool Exist()
-        {
-            return contacts != null;
         }
     }
 }

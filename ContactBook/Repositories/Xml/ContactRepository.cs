@@ -1,20 +1,19 @@
-﻿namespace ContactBook.Repositories.Xml
+﻿using System.Linq;
+
+namespace ContactBook.Repositories.Xml
 {
     using Models;
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Xml.Serialization;
 
     public class ContactRepository : IContactRepository
     {
-        private readonly string fileName = string.Empty;
+        private readonly List<Contact> contacts; 
 
-        public ContactRepository(string fileName)
+        public ContactRepository(List<Contact> contacts)
         {
-            this.fileName = fileName;
+            this.contacts = contacts;
         }
 
         /// <summary>
@@ -26,8 +25,6 @@
         /// <filterpriority>1</filterpriority>
         public IEnumerator<Contact> GetEnumerator()
         {
-            var contacts = this.GetAll();
-
             return contacts.GetEnumerator();
         }
 
@@ -54,8 +51,6 @@
         /// </returns>
         public Contact Get(Guid id)
         {
-            var contacts = this.GetAll();
-
             return contacts.FirstOrDefault(x => x.Id.Equals(id));
         }
 
@@ -69,11 +64,7 @@
         {
             contact.Id = Guid.NewGuid();
 
-            var contacts = this.GetAll().ToList();
-
             contacts.Add(contact);
-
-            this.SaveAll(contacts);
         }
 
         /// <summary>
@@ -84,8 +75,6 @@
         /// </param>
         public void Remove(Guid id)
         {
-            var contacts = this.GetAll().ToList();
-
             var contact = contacts.FirstOrDefault(x => x.Id.Equals(id));
             if (contact == null)
             {
@@ -93,8 +82,6 @@
             }
 
             contacts.Remove(contact);
-
-            this.SaveAll(contacts);
         }
 
         /// <summary>
@@ -105,8 +92,6 @@
         /// </param>
         public void Update(Contact contact)
         {
-            var contacts = this.GetAll();
-
             var existingContact = contacts.FirstOrDefault(x => x.Id.Equals(contact.Id));
             if (existingContact == null)
             {
@@ -116,57 +101,6 @@
             existingContact.Name = contact.Name;
             existingContact.Phone = contact.Phone;
             existingContact.Address = contact.Address;
-
-            this.SaveAll(contacts);
-        }
-
-        public void Create()
-        {
-            using (var fileStream = File.Create(fileName))
-            {
-                var serializer = new XmlSerializer(typeof(Contact[]));
-
-                serializer.Serialize(fileStream, new Contact[0]);
-
-                fileStream.Flush();
-            };
-        }
-
-        public void Drop()
-        {
-            File.Delete(fileName);
-        }
-
-        public bool Exist()
-        {
-            return File.Exists(fileName);
-        }
-
-        private IEnumerable<Contact> GetAll()
-        {
-            if (!File.Exists(fileName))
-            {
-                return new Contact[0];
-            }
-
-            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                var serializer = new XmlSerializer(typeof(Contact[]));
-
-                return serializer.Deserialize(fileStream) as Contact[];
-            }
-        }
-
-        private void SaveAll(IEnumerable<Contact> contacts)
-        {
-            using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                var serializer = new XmlSerializer(typeof(Contact[]));
-
-                serializer.Serialize(fileStream, contacts.ToArray());
-
-                fileStream.Flush();
-            }
         }
     }
 }
